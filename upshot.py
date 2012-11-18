@@ -28,6 +28,12 @@ LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
 log = logging.getLogger('upshot')
 
+# Local settings
+try:
+    from settings_local import *
+except ImportError:
+    pass
+
 
 def handle_screenshot(imagefile):
     # Create target dir if needed.
