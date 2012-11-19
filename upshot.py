@@ -55,6 +55,13 @@ class Upshot(NSObject):
     menuitems = {}  # Shortcut to our menuitems.
 
     def applicationDidFinishLaunching_(self, notification):
+        # Initialize.
+        self.build_menu()
+        # Go do something useful.
+        self.startListening_()
+
+    def build_menu(self):
+        """Build the OS X status bar menu."""
         # Create the statusbar item
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
@@ -90,8 +97,13 @@ class Upshot(NSObject):
 
         self.statusitem.setMenu_(self.menu)
 
-        # Go do something useful.
-        self.startListening_()
+    def update_menu(self):
+        """Update status bar menu based on app status."""
+        running = (self.observer is not None)
+        self.statusitem.setImage_(self.images['icon16' if running else
+                                              'icon16-off'])
+        self.menuitems['stop'].setHidden_(not running)
+        self.menuitems['start'].setHidden_(running)
 
     def startListening_(self, notification=None):
         """Start listening for changes to the screenshot dir."""
@@ -99,10 +111,7 @@ class Upshot(NSObject):
         self.observer = Observer()
         self.observer.schedule(event_handler, path=SCREENSHOT_DIR)
         self.observer.start()
-
-        self.statusitem.setImage_(self.images['icon16'])
-        self.menuitems['stop'].setHidden_(False)
-        self.menuitems['start'].setHidden_(True)
+        self.update_menu()
         log.debug('Listening for screen shots to be added to: %s' % (
                   SCREENSHOT_DIR))
 
@@ -113,10 +122,7 @@ class Upshot(NSObject):
             self.observer.join()
             self.observer = None
             log.debug('Stop listening for screenshots.')
-
-        self.statusitem.setImage_(self.images['icon16-off'])
-        self.menuitems['stop'].setHidden_(True)
-        self.menuitems['start'].setHidden_(False)
+        self.update_menu()
 
     def terminate_(self, *args, **kwargs):
         """Default quit event."""
