@@ -45,49 +45,76 @@ except ImportError:
 
 class Upshot(NSObject):
     """OS X status bar icon."""
-    image = {}
+    image_paths = {
+        'icon16': utils.path('images', 'icon16.png'),
+        'icon16-off': utils.path('images', 'icon16-off.png'),
+    }
+    images = {}
     statusbar = None
     observer = None  # Screenshot directory observer.
+    menuitems = {}  # Shortcut to our menuitems.
 
     def applicationDidFinishLaunching_(self, notification):
         # Create the statusbar item
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
 
-        # Load and set images
-        self.image = NSImage.alloc().initByReferencingFile_(utils.path(
-            'images', 'icon16.png'))
-        self.statusitem.setImage_(self.image)
+        # Load images and set initial icon.
+        for tag, img in self.image_paths.items():
+            self.images[tag] = NSImage.alloc().initByReferencingFile_(img)
+        self.statusitem.setImage_(self.images['icon16'])
 
         self.statusitem.setHighlightMode_(1)
         self.statusitem.setToolTip_('Upshot Screenshot Sharing')
 
         # Build menu.
         self.menu = NSMenu.alloc().init()
-        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Start Screenshot Sharing', 'startListening:', '')
+        m.setHidden_(True)  # Sharing is on by default.
+        self.menu.addItem_(m)
+        self.menuitems['start'] = m
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Pause Screenshot Sharing', 'stopListening:', '')
+        self.menu.addItem_(m)
+        self.menuitems['stop'] = m
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Quit', 'terminate:', '')
-        self.menu.addItem_(menuitem)
+        self.menu.addItem_(m)
+        self.menuitems['quit'] = m
+
         self.statusitem.setMenu_(self.menu)
 
         # Go do something useful.
-        self.startListening()
+        self.startListening_()
 
-    def startListening(self):
+    def startListening_(self, notification=None):
         """Start listening for changes to the screenshot dir."""
         event_handler = ScreenshotHandler()
         self.observer = Observer()
         self.observer.schedule(event_handler, path=SCREENSHOT_DIR)
         self.observer.start()
+
+        self.statusitem.setImage_(self.images['icon16'])
+        self.menuitems['stop'].setHidden_(False)
+        self.menuitems['start'].setHidden_(True)
         log.debug('Listening for screen shots to be added to: %s' % (
                   SCREENSHOT_DIR))
 
-    def stopListening(self):
+    def stopListening_(self, notification=None):
         """Stop listening to changes ot the screenshot dir."""
         if self.observer is not None:
-            log.debug('Stop listening for screenshots.')
             self.observer.stop()
             self.observer.join()
             self.observer = None
+            log.debug('Stop listening for screenshots.')
+
+        self.statusitem.setImage_(self.images['icon16-off'])
+        self.menuitems['stop'].setHidden_(True)
+        self.menuitems['start'].setHidden_(False)
 
     def terminate_(self, *args, **kwargs):
         """Default quit event."""
