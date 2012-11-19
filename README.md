@@ -26,6 +26,10 @@ Configuration
 -------------
 Take a look at ``upshot.py`` for constants. You can override all those in a (new) file ``settings_local.py``.
 
+The most important setting you want to change is ``SHARE_URL``. Set it to
+``http://dl.dropbox.com/u/XXXXXXXX/Screenshots/``, where ``XXXXXXXX`` is your
+public dropbox ID number.
+
 License
 -------
 upshot is released under a BSD license. Read the file ``LICENSE`` for more information.
