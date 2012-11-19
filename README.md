@@ -33,3 +33,9 @@ public dropbox ID number.
 License
 -------
 upshot is released under a BSD license. Read the file ``LICENSE`` for more information.
+
+Acknowledgments
+---------------
+* Thanks to David Vignoni for his [upload icon][icon].
+
+[icon]: http://www.iconfinder.com/icondetails/1858/32/

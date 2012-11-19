@@ -8,6 +8,10 @@ import time
 import urllib
 import urlparse
 
+from AppKit import (NSApplication, NSImage, NSMenu, NSMenuItem, NSObject,
+                    NSStatusBar, NSVariableStatusItemLength)
+from PyObjCTools import AppHelper
+
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -37,6 +41,59 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+
+class Upshot(NSObject):
+    """OS X status bar icon."""
+    image = {}
+    statusbar = None
+    observer = None  # Screenshot directory observer.
+
+    def applicationDidFinishLaunching_(self, notification):
+        # Create the statusbar item
+        statusbar = NSStatusBar.systemStatusBar()
+        self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
+
+        # Load and set images
+        self.image = NSImage.alloc().initByReferencingFile_(utils.path(
+            'images', 'icon16.png'))
+        self.statusitem.setImage_(self.image)
+
+        self.statusitem.setHighlightMode_(1)
+        self.statusitem.setToolTip_('Upshot Screenshot Sharing')
+
+        # Build menu.
+        self.menu = NSMenu.alloc().init()
+        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Quit', 'terminate:', '')
+        self.menu.addItem_(menuitem)
+        self.statusitem.setMenu_(self.menu)
+
+        # Go do something useful.
+        self.startListening()
+
+    def startListening(self):
+        """Start listening for changes to the screenshot dir."""
+        event_handler = ScreenshotHandler()
+        self.observer = Observer()
+        self.observer.schedule(event_handler, path=SCREENSHOT_DIR)
+        self.observer.start()
+        log.debug('Listening for screen shots to be added to: %s' % (
+                  SCREENSHOT_DIR))
+
+    def stopListening(self):
+        """Stop listening to changes ot the screenshot dir."""
+        if self.observer is not None:
+            log.debug('Stop listening for screenshots.')
+            self.observer.stop()
+            self.observer.join()
+            self.observer = None
+
+    def terminate_(self, *args, **kwargs):
+        """Default quit event."""
+        log.debug('Terminating.')
+        self.stopListening()
+        super(Upshot, self).terminate_(*args, **kwargs)
 
 
 class ScreenshotHandler(FileSystemEventHandler):
@@ -81,22 +138,7 @@ class ScreenshotHandler(FileSystemEventHandler):
 
 
 if __name__ == '__main__':
-    # Listen to changes to the screenshot dir.
-    event_handler = ScreenshotHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path=SCREENSHOT_DIR)
-    observer.start()
-    log.debug('Listening for screen shots to be added to: %s' % (
-              SCREENSHOT_DIR))
-
-    try:
-        while True:
-            # Hang out while the listener listens.
-            time.sleep(1)
-
-    except KeyboardInterrupt:
-        sys.exit(0)
-
-    finally:
-        observer.stop()
-        observer.join()
+    app = NSApplication.sharedApplication()
+    delegate = Upshot.alloc().init()
+    app.setDelegate_(delegate)
+    AppHelper.runEventLoop()

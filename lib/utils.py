@@ -66,6 +66,11 @@ def is_screenshot(filename):
         return False
 
 
+def path(*args):
+    """Shortcut for a path under the main upshot directory."""
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                                        *args))
+
 @autopooled
 def pbcopy(s):
     """Copy text to the OS X clipboard."""
