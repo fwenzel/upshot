@@ -16,9 +16,9 @@ It's pretty basic right now:
 
 How to run it
 -------------
-# Create a [virtualenv][virtualenv].
-# ``pip install -r requirements.txt``
-# ``./upshot.py``
+1. Create a [virtualenv][virtualenv].
+2. ``pip install -r requirements.txt``
+3. ``./upshot.py``
 
 [virtualenv]: http://www.virtualenv.org/
 
