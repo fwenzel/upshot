@@ -7,6 +7,13 @@ upshot is an automatic screen shot uploader for OS X, written in Python.
 > I drop ``XXX`` comments into the source code when I am cutting corners to make it easy to spot what needs fixed.
 > As always, pull requests and Issues on github are welcome!
 
+Features
+--------
+It's pretty basic right now:
+* Listens to a new screenshot being created with OS X's default screenshot function.
+* Gives that screenshot a random filename and moves it to your public Dropbox folder.
+* Copies that public Dropbox URL to your clipboard.
+
 How to run it
 -------------
 # Create a [virtualenv][virtualenv].

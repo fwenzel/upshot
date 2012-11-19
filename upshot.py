@@ -8,17 +8,17 @@ import time
 import urllib
 import urlparse
 
-from watchdog.events import PatternMatchingEventHandler
+from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
-from lib.utils import pbcopy, randname
+from lib import utils
 
 
-# XXX: Use (possibly) configured screen shot dir, fall back to desktop.
-# http://secrets.blacktree.com/?showapp=com.apple.screencapture
-SCREENSHOT_DIR = os.path.join(os.environ['HOME'], 'Desktop')
+SCREENSHOT_DIR = utils.get_pref(
+    domain='com.apple.screencapture', key='location',
+    default=os.path.join(os.environ['HOME'], 'Desktop'))
 # XXX: Actually detect dropbox dir
-SHARE_DIR = os.path.join(os.environ['HOME'], 'Dropbox', 'Public',
+SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
                          'Screenshots')
 
 # XXX: Detect this, somehow
@@ -39,18 +39,18 @@ except ImportError:
     pass
 
 
-class ScreenshotHandler(PatternMatchingEventHandler):
+class ScreenshotHandler(FileSystemEventHandler):
     """Handle file creation events in our screenshot dir."""
-    def __init__(self):
-        super(ScreenshotHandler, self).__init__(
-            patterns='Screen Shot.*\.png')
-
     def on_moved(self, event):
         """
         Catch move event: OS X creates a temp file, then moves it to its
         final name.
         """
         f = event.dest_path
+
+        # The moved file could be anything. Only act if it's a screenshot.
+        if not utils.is_screenshot(f):
+            return
 
         # Create target dir if needed.
         if not os.path.isdir(SHARE_DIR):
@@ -62,7 +62,7 @@ class ScreenshotHandler(PatternMatchingEventHandler):
         if RANDOM_FILENAMES:
             ext = os.path.splitext(f)[1]
             while True:
-                shared_name = randname() + ext
+                shared_name = utils.randname() + ext
                 target_file = os.path.join(SHARE_DIR, shared_name)
                 if not os.path.exists(target_file):
                     log.debug('New file name is: %s' % shared_name)
@@ -77,7 +77,7 @@ class ScreenshotHandler(PatternMatchingEventHandler):
         logging.debug('Share URL is %s' % url)
 
         logging.debug('Copying to clipboard.')
-        pbcopy(url)
+        utils.pbcopy(url)
 
 
 if __name__ == '__main__':

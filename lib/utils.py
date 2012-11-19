@@ -1,8 +1,12 @@
+import base64
+import os
 import random
 import string
 from functools import wraps
 
-from AppKit import NSArray, NSAutoreleasePool, NSPasteboard
+from AppKit import (NSArray, NSAutoreleasePool, NSFileManager, NSPasteboard,
+                    NSPropertyListMutableContainers,
+                    NSPropertyListSerialization, NSUserDefaults)
 
 
 CHARS = string.ascii_letters + string.digits
@@ -16,9 +20,50 @@ def autopooled(f):
     @wraps(f)
     def pooled_func(*args, **kwargs):
         pool = NSAutoreleasePool.alloc().init()
-        f(*args, **kwargs)
+        result = f(*args, **kwargs)
         del pool
+        return result
     return pooled_func
+
+
+def detect_dropbox_folder():
+    """
+    Find user's dropbox folder location.
+    They keep it base64-encoded in a file 'hosts.db' in $HOME/.dropbox.
+    """
+    with open(os.path.join(os.environ['HOME'], '.dropbox', 'host.db'),
+              'r') as f:
+        encoded_dir = f.readlines()[1]
+        return base64.b64decode(encoded_dir)
+
+
+@autopooled
+def get_pref(key='', domain='com.fredericiana.upshot', default=None):
+    """Read a user pref."""
+    standardUserDefaults = NSUserDefaults.standardUserDefaults()
+    thisDomain = standardUserDefaults.persistentDomainForName_(domain)
+    try:
+        return thisDomain[key]
+    except (TypeError, KeyError):
+        # If domain or key were not found, fall back.
+        return default
+
+
+@autopooled
+def is_screenshot(filename):
+    """Is file an OS X screen capture?"""
+    fileman = NSFileManager.defaultManager()
+    # Read file attributes.
+    try:
+        attrs = fileman.attributesOfItemAtPath_error_(filename, None)[0]
+        # Abandon all hope for PEP8, ye who enter here.
+        is_screen = attrs['NSFileExtendedAttributes']['com.apple.metadata:kMDItemIsScreenCapture']
+        plist, fmt, err = NSPropertyListSerialization.propertyListFromData_mutabilityOption_format_errorDescription_(
+            is_screen, NSPropertyListMutableContainers, None, None)
+        # If all this worked, we have a boolean now.
+        return isinstance(plist, bool) and plist
+    except (TypeError, KeyError):
+        return False
 
 
 @autopooled
