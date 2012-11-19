@@ -81,6 +81,8 @@ class Upshot(NSObject):
         self.menu.addItem_(m)
         self.menuitems['stop'] = m
 
+        self.menu.addItem_(NSMenuItem.separatorItem())
+
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Quit', 'terminate:', '')
         self.menu.addItem_(m)
