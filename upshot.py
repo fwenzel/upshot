@@ -11,7 +11,7 @@ import urlparse
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 
-from lib.utils import pbcopy
+from lib.utils import pbcopy, randname
 
 
 # XXX: Use (possibly) configured screen shot dir, fall back to desktop.
@@ -24,6 +24,8 @@ SHARE_DIR = os.path.join(os.environ['HOME'], 'Dropbox', 'Public',
 # XXX: Detect this, somehow
 DROPBOX_ID = 18779383  # Part of my public shares, probably safe to put here.
 SHARE_URL = 'http://dl.dropbox.com/u/%s/Screenshots/' % DROPBOX_ID
+
+RANDOM_FILENAMES = True  # Randomize file name?
 
 # Set up logging
 LOG_LEVEL = logging.DEBUG
@@ -57,11 +59,21 @@ class ScreenshotHandler(PatternMatchingEventHandler):
 
         # Move image file to target dir.
         log.debug('Moving %s to %s' % (f, SHARE_DIR))
-        shutil.move(f, SHARE_DIR)
+        if RANDOM_FILENAMES:
+            ext = os.path.splitext(f)[1]
+            while True:
+                shared_name = randname() + ext
+                target_file = os.path.join(SHARE_DIR, shared_name)
+                if not os.path.exists(target_file):
+                    log.debug('New file name is: %s' % shared_name)
+                    shutil.move(f, target_file)
+                    break
+        else:
+            shared_name = os.path.basename(f)
+            shutil.move(f, SHARE_DIR)
 
         # Create shared URL
-        url = urlparse.urljoin(
-            SHARE_URL, urllib.quote(os.path.basename(f)))
+        url = urlparse.urljoin(SHARE_URL, urllib.quote(shared_name))
         logging.debug('Share URL is %s' % url)
 
         logging.debug('Copying to clipboard.')

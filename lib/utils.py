@@ -1,6 +1,11 @@
+import random
+import string
 from functools import wraps
 
 from AppKit import NSArray, NSAutoreleasePool, NSPasteboard
+
+
+CHARS = string.ascii_letters + string.digits
 
 
 def autopooled(f):
@@ -23,3 +28,8 @@ def pbcopy(s):
     pb.clearContents()
     a = NSArray.arrayWithObject_(s)
     pb.writeObjects_(a)
+
+
+def randname(length=4):
+    """Generate random (file) name."""
+    return ''.join(random.choice(CHARS) for i in xrange(length))
