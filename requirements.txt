@@ -1,1 +1,2 @@
 pyobjc==2.4
+watchdog==0.6.0

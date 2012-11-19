@@ -8,8 +8,10 @@ import time
 import urllib
 import urlparse
 
-import Foundation
-from AppKit import NSArray, NSPasteboard
+from watchdog.events import PatternMatchingEventHandler
+from watchdog.observers import Observer
+
+from lib.utils import pbcopy
 
 
 # XXX: Use (possibly) configured screen shot dir, fall back to desktop.
@@ -35,42 +37,54 @@ except ImportError:
     pass
 
 
-def handle_screenshot(imagefile):
-    # Create target dir if needed.
-    if not os.path.isdir(SHARE_DIR):
-        log.debug('Creating share dir %s' % SHARE_DIR)
-        os.makedirs(SHARE_DIR)
+class ScreenshotHandler(PatternMatchingEventHandler):
+    """Handle file creation events in our screenshot dir."""
+    def __init__(self):
+        super(ScreenshotHandler, self).__init__(
+            patterns='Screen Shot.*\.png')
 
-    # Move image file to target dir.
-    log.debug('Moving %s to %s' % (imagefile, SHARE_DIR))
-    shutil.move(imagefile, SHARE_DIR)
+    def on_moved(self, event):
+        """
+        Catch move event: OS X creates a temp file, then moves it to its
+        final name.
+        """
+        f = event.dest_path
 
-    # Create shared URL
-    url = urlparse.urljoin(
-        SHARE_URL, urllib.quote(os.path.basename(imagefile)))
-    logging.debug('Share URL is %s' % url)
+        # Create target dir if needed.
+        if not os.path.isdir(SHARE_DIR):
+            log.debug('Creating share dir %s' % SHARE_DIR)
+            os.makedirs(SHARE_DIR)
 
-    logging.debug('Copying to clipboard.')
-    pbcopy(url)
+        # Move image file to target dir.
+        log.debug('Moving %s to %s' % (f, SHARE_DIR))
+        shutil.move(f, SHARE_DIR)
 
+        # Create shared URL
+        url = urlparse.urljoin(
+            SHARE_URL, urllib.quote(os.path.basename(f)))
+        logging.debug('Share URL is %s' % url)
 
-def pbcopy(s):
-    """Copy text to the OS X clipboard."""
-    pb = NSPasteboard.generalPasteboard()
-    pb.clearContents()
-    a = NSArray.arrayWithObject_(s)
-    pb.writeObjects_(a)
+        logging.debug('Copying to clipboard.')
+        pbcopy(url)
 
 
 if __name__ == '__main__':
+    # Listen to changes to the screenshot dir.
+    event_handler = ScreenshotHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path=SCREENSHOT_DIR)
+    observer.start()
+    log.debug('Listening for screen shots to be added to: %s' % (
+              SCREENSHOT_DIR))
+
     try:
-        # XXX: Ugly. Listen to changes in the screenshot target dir instead.
         while True:
-            # XXX: Read OS X screen capture flag in the file instead to make
-            # sure it's really a screen shot.
-            for f in glob.glob(os.path.join(SCREENSHOT_DIR, 'Screen Shot *.png')):
-                handle_screenshot(f)
-            time.sleep(10)
+            # Hang out while the listener listens.
+            time.sleep(1)
 
     except KeyboardInterrupt:
         sys.exit(0)
+
+    finally:
+        observer.stop()
+        observer.join()
