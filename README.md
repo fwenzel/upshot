@@ -1,12 +1,12 @@
-upshot
+UpShot
 ======
 
 ![](https://raw.github.com/fwenzel/upshot/master/images/icon48.png)
 
-upshot is an automatic screen shot uploader for OS X, written in Python.
+UpShot is an automatic screen shot uploader for OS X, written in Python.
 
 > *Note:* This is experimental software and probably does not do what you want yet without massaging the source code.
-> I drop ``XXX`` comments into the source code when I am cutting corners to make it easy to spot what needs fixed.
+> This is going to change over time and become more convenient to use.
 > As always, pull requests and Issues on github are welcome!
 
 Features
@@ -32,12 +32,16 @@ The most important setting you want to change is ``SHARE_URL``. Set it to
 ``http://dl.dropbox.com/u/XXXXXXXX/Screenshots/``, where ``XXXXXXXX`` is your
 public dropbox ID number.
 
-License
--------
-upshot is released under a BSD license. Read the file ``LICENSE`` for more information.
-
 Acknowledgments
 ---------------
 * Thanks to David Vignoni for his [upload icon][icon].
 
 [icon]: http://www.iconfinder.com/icondetails/1858/32/
+
+License
+-------
+UpShot is released under a BSD license. Read the file ``LICENSE`` for more information.
+
+---
+
+Copyright (c) 2012 [Fred Wenzel](http://fredericiana.com).

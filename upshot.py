@@ -8,8 +8,9 @@ import time
 import urllib
 import urlparse
 
-from AppKit import (NSApplication, NSImage, NSMenu, NSMenuItem, NSObject,
-                    NSStatusBar, NSVariableStatusItemLength)
+from AppKit import (
+    NSApplication, NSImage, NSMenu, NSMenuItem, NSObject, NSStatusBar, NSURL,
+    NSVariableStatusItemLength, NSWorkspace)
 from PyObjCTools import AppHelper
 
 from watchdog.events import FileSystemEventHandler
@@ -23,6 +24,8 @@ SCREENSHOT_DIR = utils.get_pref(
     default=os.path.join(os.environ['HOME'], 'Desktop'))
 SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
                          'Screenshots')
+
+HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
 
 # XXX: Detect this, somehow
 DROPBOX_ID = 18779383  # Part of my public shares, probably safe to put here.
@@ -77,6 +80,13 @@ class Upshot(NSObject):
         self.menu = NSMenu.alloc().init()
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Browse Screenshots', 'openShareDir:', '')
+        self.menu.addItem_(m)
+        self.menuitems['opensharedir'] = m
+
+        self.menu.addItem_(NSMenuItem.separatorItem())
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Start Screenshot Sharing', 'startListening:', '')
         m.setHidden_(True)  # Sharing is on by default.
         self.menu.addItem_(m)
@@ -90,7 +100,14 @@ class Upshot(NSObject):
         self.menu.addItem_(NSMenuItem.separatorItem())
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            'Quit', 'terminate:', '')
+            'About UpShot', 'about:', '')
+        self.menu.addItem_(m)
+        self.menuitems['about'] = m
+
+        self.menu.addItem_(NSMenuItem.separatorItem())
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Quit UpShot', 'terminate:', '')
         self.menu.addItem_(m)
         self.menuitems['quit'] = m
 
@@ -103,6 +120,16 @@ class Upshot(NSObject):
                                               'icon16-off'])
         self.menuitems['stop'].setHidden_(not running)
         self.menuitems['start'].setHidden_(running)
+
+    def openShareDir_(self, notification=None):
+        """Open the share directory in Finder."""
+        sw = NSWorkspace.sharedWorkspace()
+        sw.openFile_(SHARE_DIR)
+
+    def about_(self, notification=None):
+        """Open the UpShot homepage in a browser."""
+        sw = NSWorkspace.sharedWorkspace()
+        sw.openURL_(NSURL.URLWithString_(HOMEPAGE_URL))
 
     def startListening_(self, notification=None):
         """Start listening for changes to the screenshot dir."""
