@@ -21,7 +21,6 @@ from lib import utils
 SCREENSHOT_DIR = utils.get_pref(
     domain='com.apple.screencapture', key='location',
     default=os.path.join(os.environ['HOME'], 'Desktop'))
-# XXX: Actually detect dropbox dir
 SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
                          'Screenshots')
 
