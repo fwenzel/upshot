@@ -1,6 +1,8 @@
 upshot
 ======
 
+![](https://raw.github.com/fwenzel/upshot/master/images/icon48.png)
+
 upshot is an automatic screen shot uploader for OS X, written in Python.
 
 > *Note:* This is experimental software and probably does not do what you want yet without massaging the source code.
