@@ -20,13 +20,17 @@ How to run it
 -------------
 1. Create a [virtualenv][virtualenv].
 2. ``pip install -r requirements.txt``
-3. ``./upshot.py``
+3. ``python setup.py py2app``
+
+This will build an app package in the directory ``dist``. You can execute it from there. If you want to see console output, start it via ``./dist/UpShot.app/Contents/MacOS/UpShot`` instead.
 
 [virtualenv]: http://www.virtualenv.org/
 
+> *Note:* Your virtualenv might not contain libpython2.x.dylib and thus cause an error. You can simply ``cd $VIRTUAL_ENV`` and ``ln -s /path/to/libpython2.7.dylib`` as a workaround.
+
 Configuration
 -------------
-Take a look at ``upshot.py`` for constants. You can override all those in a (new) file ``settings_local.py``.
+The latest version has a configuration screen, but not everything is configurable yet. For a full list, check out ``upshot.py`` for constants. You can override all those in a (new) file ``settings_local.py``.
 
 The most important setting you want to change is ``SHARE_URL``. Set it to
 ``http://dl.dropbox.com/u/XXXXXXXX/Screenshots/``, where ``XXXXXXXX`` is your
