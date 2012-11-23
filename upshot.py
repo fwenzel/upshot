@@ -16,10 +16,12 @@ from PyObjCTools import AppHelper
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
-from lib import utils
+import Preferences
+import utils
+from Preferences import PreferencesWindowController, get_pref
 
 
-SCREENSHOT_DIR = utils.get_pref(
+SCREENSHOT_DIR = get_pref(
     domain='com.apple.screencapture', key='location',
     default=os.path.join(os.environ['HOME'], 'Desktop'))
 SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
@@ -31,12 +33,13 @@ HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
 DROPBOX_ID = 18779383  # Part of my public shares, probably safe to put here.
 SHARE_URL = 'http://dl.dropbox.com/u/%s/Screenshots/' % DROPBOX_ID
 
-RANDOM_FILENAMES = True  # Randomize file name?
-
 # Set up logging
 LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
 log = logging.getLogger('upshot')
+
+# NSApp object
+app = None
 
 # Local settings
 try:
@@ -48,8 +51,8 @@ except ImportError:
 class Upshot(NSObject):
     """OS X status bar icon."""
     image_paths = {
-        'icon16': utils.path('images', 'icon16.png'),
-        'icon16-off': utils.path('images', 'icon16-off.png'),
+        'icon16': 'resources/icon16.png',
+        'icon16-off': 'resources/icon16-off.png',
     }
     images = {}
     statusbar = None
@@ -57,7 +60,6 @@ class Upshot(NSObject):
     menuitems = {}  # Shortcut to our menuitems.
 
     def applicationDidFinishLaunching_(self, notification):
-        # Initialize.
         self.build_menu()
         # Go do something useful.
         self.startListening_()
@@ -97,6 +99,11 @@ class Upshot(NSObject):
         self.menu.addItem_(m)
         self.menuitems['stop'] = m
 
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Preferences...', 'openPreferences:', '')
+        self.menu.addItem_(m)
+        self.menuitems['preferences'] = m
+
         self.menu.addItem_(NSMenuItem.separatorItem())
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
@@ -121,17 +128,21 @@ class Upshot(NSObject):
         self.menuitems['stop'].setHidden_(not running)
         self.menuitems['start'].setHidden_(running)
 
-    def openShareDir_(self, notification=None):
+    def openShareDir_(self, sender=None):
         """Open the share directory in Finder."""
         sw = NSWorkspace.sharedWorkspace()
         sw.openFile_(SHARE_DIR)
 
-    def about_(self, notification=None):
+    def about_(self, sender=None):
         """Open the UpShot homepage in a browser."""
         sw = NSWorkspace.sharedWorkspace()
         sw.openURL_(NSURL.URLWithString_(HOMEPAGE_URL))
 
-    def startListening_(self, notification=None):
+    def openPreferences_(self, sender=None):
+        PreferencesWindowController.showPreferencesWindow()
+        app.activateIgnoringOtherApps_(True)
+
+    def startListening_(self, sender=None):
         """Start listening for changes to the screenshot dir."""
         event_handler = ScreenshotHandler()
         self.observer = Observer()
@@ -141,7 +152,7 @@ class Upshot(NSObject):
         log.debug('Listening for screen shots to be added to: %s' % (
                   SCREENSHOT_DIR))
 
-    def stopListening_(self, notification=None):
+    def stopListening_(self, sender=None):
         """Stop listening to changes ot the screenshot dir."""
         if self.observer is not None:
             self.observer.stop()
@@ -150,11 +161,11 @@ class Upshot(NSObject):
             log.debug('Stop listening for screenshots.')
         self.update_menu()
 
-    def terminate_(self, *args, **kwargs):
+    def terminate_(self, sender=None):
         """Default quit event."""
         log.debug('Terminating.')
         self.stopListening()
-        super(Upshot, self).terminate_(*args, **kwargs)
+        super(Upshot, self).terminate_(sender)
 
 
 class ScreenshotHandler(FileSystemEventHandler):
@@ -177,7 +188,7 @@ class ScreenshotHandler(FileSystemEventHandler):
 
         # Move image file to target dir.
         log.debug('Moving %s to %s' % (f, SHARE_DIR))
-        if RANDOM_FILENAMES:
+        if get_pref('randomize'):  # Randomize file names?
             ext = os.path.splitext(f)[1]
             while True:
                 shared_name = utils.randname() + ext
@@ -199,6 +210,9 @@ class ScreenshotHandler(FileSystemEventHandler):
 
 
 if __name__ == '__main__':
+    # Prepare preferences service.
+    Preferences.set_defaults()
+
     app = NSApplication.sharedApplication()
     delegate = Upshot.alloc().init()
     app.setDelegate_(delegate)

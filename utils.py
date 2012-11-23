@@ -4,9 +4,8 @@ import random
 import string
 from functools import wraps
 
-from AppKit import (NSArray, NSAutoreleasePool, NSFileManager, NSPasteboard,
-                    NSPropertyListMutableContainers,
-                    NSPropertyListSerialization, NSUserDefaults)
+from Foundation import *
+from AppKit import *
 
 
 CHARS = string.ascii_letters + string.digits
@@ -38,18 +37,6 @@ def detect_dropbox_folder():
 
 
 @autopooled
-def get_pref(key='', domain='com.fredericiana.upshot', default=None):
-    """Read a user pref."""
-    standardUserDefaults = NSUserDefaults.standardUserDefaults()
-    thisDomain = standardUserDefaults.persistentDomainForName_(domain)
-    try:
-        return thisDomain[key]
-    except (TypeError, KeyError):
-        # If domain or key were not found, fall back.
-        return default
-
-
-@autopooled
 def is_screenshot(filename):
     """Is file an OS X screen capture?"""
     fileman = NSFileManager.defaultManager()
@@ -65,11 +52,6 @@ def is_screenshot(filename):
     except (TypeError, KeyError):
         return False
 
-
-def path(*args):
-    """Shortcut for a path under the main upshot directory."""
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
-                                        *args))
 
 @autopooled
 def pbcopy(s):
