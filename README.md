@@ -16,8 +16,8 @@ It's pretty basic right now:
 * Gives that screenshot a random filename and moves it to your public Dropbox folder.
 * Copies that public Dropbox URL to your clipboard.
 
-How to run it
--------------
+Compiling it
+------------
 1. Create a [virtualenv][virtualenv].
 2. ``pip install -r requirements.txt``
 3. ``python setup.py py2app``
@@ -31,10 +31,6 @@ This will build an app package in the directory ``dist``. You can execute it fro
 Configuration
 -------------
 The latest version has a configuration screen, but not everything is configurable yet. For a full list, check out ``upshot.py`` for constants. You can override all those in a (new) file ``settings_local.py``.
-
-The most important setting you want to change is ``SHARE_URL``. Set it to
-``http://dl.dropbox.com/u/XXXXXXXX/Screenshots/``, where ``XXXXXXXX`` is your
-public dropbox ID number.
 
 Acknowledgments
 ---------------
