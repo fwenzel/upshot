@@ -18,12 +18,15 @@ It's pretty basic right now:
 
 Compiling it
 ------------
+UpShot uses a [fabric][fabric] script for build and maintenance tasks:
+
 1. Create a [virtualenv][virtualenv].
 2. ``pip install -r requirements.txt``
-3. ``python setup.py py2app``
+3. ``fab build``
 
-This will build an app package in the directory ``dist``. You can execute it from there. If you want to see console output, start it via ``./dist/UpShot.app/Contents/MacOS/UpShot`` instead.
+This will build an app package in the directory ``dist``. You can execute it from there. If you want to see console output, start it via ``fab run`` instead.
 
+[fabric]: http://fabfile.org/
 [virtualenv]: http://www.virtualenv.org/
 
 > *Note:* Your virtualenv might not contain libpython2.x.dylib and thus cause an error. You can simply ``cd $VIRTUAL_ENV`` and ``ln -s /path/to/libpython2.7.dylib`` as a workaround.
