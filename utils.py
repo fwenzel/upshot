@@ -11,6 +11,28 @@ from AppKit import *
 CHARS = string.ascii_letters + string.digits
 
 
+class UpShotWindowController(NSWindowController):
+    """Common code for preferences window and others."""
+    nibfile = None  # Must be overridden in subclasses.
+    app = None
+    _singleton = None
+
+    @classmethod
+    def showWindow(cls, app=None):
+        """Create window as a singleton and return."""
+        if not cls._singleton:
+            cls._singleton = cls.alloc().init()
+        if app:
+            cls._singleton.app = app
+            app.activateIgnoringOtherApps_(True)
+        cls._singleton.window().center()
+        cls._singleton.showWindow_(cls._singleton)
+        return cls._singleton
+
+    def init(self):
+        return self.initWithWindowNibName_(self.nibfile)
+
+
 def autopooled(f):
     """
     Decorator to keep threads from leaking in ObjC.
@@ -30,10 +52,13 @@ def detect_dropbox_folder():
     Find user's dropbox folder location.
     They keep it base64-encoded in a file 'hosts.db' in $HOME/.dropbox.
     """
-    with open(os.path.join(os.environ['HOME'], '.dropbox', 'host.db'),
-              'r') as f:
-        encoded_dir = f.readlines()[1]
-        return base64.b64decode(encoded_dir)
+    try:
+        with open(os.path.join(os.environ['HOME'], '.dropbox', 'host.db'),
+                  'r') as f:
+            encoded_dir = f.readlines()[1]
+            return base64.b64decode(encoded_dir)
+    except:
+        return None
 
 
 @autopooled
@@ -65,3 +90,28 @@ def pbcopy(s):
 def randname(length=4):
     """Generate random (file) name."""
     return ''.join(random.choice(CHARS) for i in xrange(length))
+
+
+@autopooled
+def get_pref(key, default=None, setdefault=False, domain=None):
+    """
+    Read a user pref, possibly from another domain.
+    setdefault will set pref to default value if not found.
+    """
+    user_defaults = NSUserDefaults.standardUserDefaults()
+    if domain is not None:
+        user_defaults = user_defaults.persistentDomainForName_(domain)
+    try:
+        return user_defaults[key]
+    except (TypeError, KeyError):
+        if setdefault and domain is None:
+            set_pref(key, default)
+        # If domain or key were not found, fall back.
+        return default
+
+
+@autopooled
+def set_pref(key, val):
+    """Set a user pref in the current domain."""
+    user_defaults = NSUserDefaults.standardUserDefaults()
+    user_defaults.setObject_forKey_(val, key)

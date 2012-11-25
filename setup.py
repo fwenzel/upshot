@@ -1,7 +1,10 @@
+import glob
+
 from setuptools import setup
 
+
 APP = ['upshot.py']
-DATA_FILES = ['resources', 'PreferenceWindow.xib']
+DATA_FILES = ['resources', ('', glob.glob('*.xib'))]
 OPTIONS = {
     'argv_emulation': False,
     'plist': {

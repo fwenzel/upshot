@@ -16,12 +16,12 @@ from PyObjCTools import AppHelper
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
+import DropboxDetect
 import Preferences
 import utils
-from Preferences import PreferencesWindowController, get_pref
 
 
-SCREENSHOT_DIR = get_pref(
+SCREENSHOT_DIR = utils.get_pref(
     domain='com.apple.screencapture', key='location',
     default=os.path.join(os.environ['HOME'], 'Desktop'))
 SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
@@ -29,9 +29,7 @@ SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
 
 HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
 
-# XXX: Detect this, somehow
-DROPBOX_ID = 18779383  # Part of my public shares, probably safe to put here.
-SHARE_URL = 'http://dl.dropbox.com/u/%s/Screenshots/' % DROPBOX_ID
+SHARE_URL = 'http://dl.dropbox.com/u/{dropboxid}/Screenshots/'
 
 # Set up logging
 LOG_LEVEL = logging.DEBUG
@@ -62,7 +60,11 @@ class Upshot(NSObject):
     def applicationDidFinishLaunching_(self, notification):
         self.build_menu()
         # Go do something useful.
-        self.startListening_()
+        if utils.get_pref('dropboxid'):
+            self.startListening_()
+        else:
+            self.stopListening_()
+            DropboxDetect.DropboxDetectWindowController.showWindow(app)
 
     def build_menu(self):
         """Build the OS X status bar menu."""
@@ -100,6 +102,12 @@ class Upshot(NSObject):
         self.menuitems['stop'] = m
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            "Need to detect Dropbox ID. Open Preferences!", '', '')
+        m.setHidden_(True)  # We hopefully don't need this.
+        self.menu.addItem_(m)
+        self.menuitems['needpref'] = m
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Preferences...', 'openPreferences:', '')
         self.menu.addItem_(m)
         self.menuitems['preferences'] = m
@@ -125,8 +133,15 @@ class Upshot(NSObject):
         running = (self.observer is not None)
         self.statusitem.setImage_(self.images['icon16' if running else
                                               'icon16-off'])
-        self.menuitems['stop'].setHidden_(not running)
-        self.menuitems['start'].setHidden_(running)
+
+        if utils.get_pref('dropboxid'):  # Runnable.
+            self.menuitems['stop'].setHidden_(not running)
+            self.menuitems['start'].setHidden_(running)
+            self.menuitems['needpref'].setHidden_(True)
+        else:  # Need settings.
+            self.menuitems['start'].setHidden_(True)
+            self.menuitems['stop'].setHidden_(True)
+            self.menuitems['needpref'].setHidden_(False)
 
     def openShareDir_(self, sender=None):
         """Open the share directory in Finder."""
@@ -139,8 +154,7 @@ class Upshot(NSObject):
         sw.openURL_(NSURL.URLWithString_(HOMEPAGE_URL))
 
     def openPreferences_(self, sender=None):
-        PreferencesWindowController.showPreferencesWindow()
-        app.activateIgnoringOtherApps_(True)
+        Preferences.PreferencesWindowController.showWindow(app)
 
     def startListening_(self, sender=None):
         """Start listening for changes to the screenshot dir."""
@@ -160,6 +174,10 @@ class Upshot(NSObject):
             self.observer = None
             log.debug('Stop listening for screenshots.')
         self.update_menu()
+
+    def restart_(self, sender=None):
+        self.stopListening_()
+        self.startListening_()
 
     def terminate_(self, sender=None):
         """Default quit event."""
@@ -188,7 +206,7 @@ class ScreenshotHandler(FileSystemEventHandler):
 
         # Move image file to target dir.
         log.debug('Moving %s to %s' % (f, SHARE_DIR))
-        if get_pref('randomize'):  # Randomize file names?
+        if utils.get_pref('randomize'):  # Randomize file names?
             ext = os.path.splitext(f)[1]
             while True:
                 shared_name = utils.randname() + ext
@@ -202,7 +220,9 @@ class ScreenshotHandler(FileSystemEventHandler):
             shutil.move(f, SHARE_DIR)
 
         # Create shared URL
-        url = urlparse.urljoin(SHARE_URL, urllib.quote(shared_name))
+        url = urlparse.urljoin(
+            SHARE_URL.format(dropboxid=utils.get_pref('dropboxid')),
+            urllib.quote(shared_name))
         logging.debug('Share URL is %s' % url)
 
         logging.debug('Copying to clipboard.')
