@@ -213,7 +213,10 @@ class ScreenshotHandler(FileSystemEventHandler):
                 target_file = os.path.join(SHARE_DIR, shared_name)
                 if not os.path.exists(target_file):
                     log.debug('New file name is: %s' % shared_name)
-                    shutil.move(f, target_file)
+                    if utils.get_pref('copyonly'):
+                        shutil.copy(f, target_file)
+                    else:
+                        shutil.move(f, target_file)
                     break
         else:
             shared_name = os.path.basename(f)

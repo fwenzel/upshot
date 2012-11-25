@@ -8,6 +8,7 @@ from utils import (UpShotWindowController, detect_dropbox_folder, get_pref,
 
 DEFAULTS = {
     'randomize': True,  # Randomize screenshot names?
+    'copyonly': False,  # Copy (don't move) screen shots.
 }
 
 
@@ -15,6 +16,7 @@ class PreferencesWindowController(UpShotWindowController):
     nibfile = u'PreferenceWindow'
 
     randomize = objc.IBOutlet()
+    copyonly = objc.IBOutlet()
     dropboxdir = objc.IBOutlet()
     dropboxid = objc.IBOutlet()
 
@@ -24,17 +26,19 @@ class PreferencesWindowController(UpShotWindowController):
 
     def updateDisplay(self):
         """Update window display from settings."""
+        self.randomize.setState_(get_pref('randomize'))
+        self.copyonly.setState_(get_pref('copyonly'))
+
         dropboxdir = detect_dropbox_folder()
         self.dropboxdir.setStringValue_(
             dropboxdir or u'None. Install Dropbox?')
         self.dropboxid.setStringValue_(get_pref('dropboxid'))
 
-        self.randomize.setState_(get_pref('randomize'))
-
     @objc.IBAction
     def saveSettings_(self, sender):
         """Save changed settings."""
         set_pref('randomize', bool(self.randomize.state()))
+        set_pref('copyonly', bool(self.copyonly.state()))
         try:
             set_pref('dropboxid', int(self.dropboxid.stringValue()))
         except ValueError:
