@@ -18,14 +18,15 @@ from watchdog.observers import Observer
 
 import DropboxDetect
 import Preferences
-import utils
+from lib import utils
+from lib.windows import alert
 
 
 SCREENSHOT_DIR = utils.get_pref(
     domain='com.apple.screencapture', key='location',
     default=os.path.join(os.environ['HOME'], 'Desktop'))
-SHARE_DIR = os.path.join(utils.detect_dropbox_folder(), 'Public',
-                         'Screenshots')
+DROPBOX_DIR = utils.detect_dropbox_folder()
+SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
 
 HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
 
@@ -53,11 +54,17 @@ class Upshot(NSObject):
         'icon16-off': 'resources/icon16-off.png',
     }
     images = {}
-    statusbar = None
+    statusitem = None
     observer = None  # Screenshot directory observer.
     menuitems = {}  # Shortcut to our menuitems.
 
     def applicationDidFinishLaunching_(self, notification):
+        if not DROPBOX_DIR:  # Oh-oh.
+            alert('Unable to detect Dropbox folder',
+                  'UpShot requires Dropbox, for now. Please install it, then '
+                  'try again.', ['OK'])
+            self.terminate_(self)
+
         self.build_menu()
         # Go do something useful.
         if utils.get_pref('dropboxid'):
@@ -130,6 +137,9 @@ class Upshot(NSObject):
 
     def update_menu(self):
         """Update status bar menu based on app status."""
+        if self.statusitem is None:
+            return
+
         running = (self.observer is not None)
         self.statusitem.setImage_(self.images['icon16' if running else
                                               'icon16-off'])
@@ -182,8 +192,8 @@ class Upshot(NSObject):
     def terminate_(self, sender=None):
         """Default quit event."""
         log.debug('Terminating.')
-        self.stopListening()
-        super(Upshot, self).terminate_(sender)
+        self.stopListening_()
+        app.terminate_(sender)
 
 
 class ScreenshotHandler(FileSystemEventHandler):

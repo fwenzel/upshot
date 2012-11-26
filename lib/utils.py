@@ -11,28 +11,6 @@ from AppKit import *
 CHARS = string.ascii_letters + string.digits
 
 
-class UpShotWindowController(NSWindowController):
-    """Common code for preferences window and others."""
-    nibfile = None  # Must be overridden in subclasses.
-    app = None
-    _singleton = None
-
-    @classmethod
-    def showWindow(cls, app=None):
-        """Create window as a singleton and return."""
-        if not cls._singleton:
-            cls._singleton = cls.alloc().init()
-        if app:
-            cls._singleton.app = app
-            app.activateIgnoringOtherApps_(True)
-        cls._singleton.window().center()
-        cls._singleton.showWindow_(cls._singleton)
-        return cls._singleton
-
-    def init(self):
-        return self.initWithWindowNibName_(self.nibfile)
-
-
 def autopooled(f):
     """
     Decorator to keep threads from leaking in ObjC.

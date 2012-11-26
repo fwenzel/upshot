@@ -8,6 +8,7 @@ UpShot is an automatic screen shot uploader for OS X, written in Python.
 > *Note:* This is experimental software and probably does not do what you want yet without massaging the source code.
 > This is going to change over time and become more convenient to use.
 > As always, pull requests and Issues on github are welcome!
+> UpShot was only tested with OS X 10.7 -- Help porting it to 10.8 will be greatly appreciated.
 
 Features
 --------

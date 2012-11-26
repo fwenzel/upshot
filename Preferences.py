@@ -2,8 +2,8 @@ import objc
 from Foundation import *
 
 import DropboxDetect
-from utils import (UpShotWindowController, detect_dropbox_folder, get_pref,
-                   set_pref)
+from lib.utils import detect_dropbox_folder, get_pref, set_pref
+from lib.windows import UpShotWindowController
 
 
 DEFAULTS = {

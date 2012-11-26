@@ -5,7 +5,8 @@ import objc
 from AppKit import *
 from Foundation import *
 
-from utils import UpShotWindowController, detect_dropbox_folder, set_pref
+from lib.utils import detect_dropbox_folder, set_pref
+from lib.windows import UpShotWindowController
 
 
 DROPBOX_URL_RE = re.compile(r'^https?://dl.dropbox.com/u/(\d+)/.*')

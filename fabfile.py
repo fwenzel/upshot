@@ -87,4 +87,4 @@ def run():
     if not os.path.exists(RUN_PATH):
         sys.stderr.write('Run `fab build` before you can run UpShot.')
         sys.exit(1)
-    local(runpath)
+    local(RUN_PATH)
