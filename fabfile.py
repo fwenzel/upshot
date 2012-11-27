@@ -9,7 +9,7 @@ from fabric.api import local
 
 
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
-RELEASE = '0.1'
+RELEASE = '1.0'
 
 
 def clean():
