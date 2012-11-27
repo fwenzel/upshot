@@ -5,6 +5,8 @@ UpShot
 
 UpShot is an automatic screen shot uploader for OS X, written in Python.
 
+For sharing, UpShot uses Dropbox's Public folder, giving you maximum control over what you share.
+
 > *Note:*  UpShot was only tested with OS X 10.7 -- Help porting it to 10.8 (or even back to 10.6, if that's desirable) will be greatly appreciated.
 > As always, pull requests and Issues on [github][github] are welcome!
 
