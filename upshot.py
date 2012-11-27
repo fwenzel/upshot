@@ -8,9 +8,7 @@ import time
 import urllib
 import urlparse
 
-from AppKit import (
-    NSApplication, NSImage, NSMenu, NSMenuItem, NSObject, NSStatusBar, NSURL,
-    NSVariableStatusItemLength, NSWorkspace)
+from AppKit import *
 from PyObjCTools import AppHelper
 
 from watchdog.events import FileSystemEventHandler
@@ -19,6 +17,7 @@ from watchdog.observers import Observer
 import DropboxDetect
 import Preferences
 from lib import utils
+from lib.notifications import Growler
 from lib.windows import alert
 
 
@@ -50,8 +49,8 @@ except ImportError:
 class Upshot(NSObject):
     """OS X status bar icon."""
     image_paths = {
-        'icon16': 'resources/icon16.png',
-        'icon16-off': 'resources/icon16-off.png',
+        'icon16': 'icon16.png',
+        'icon16-off': 'icon16-off.png',
     }
     images = {}
     statusitem = None
@@ -176,6 +175,9 @@ class Upshot(NSObject):
         log.debug('Listening for screen shots to be added to: %s' % (
                   SCREENSHOT_DIR))
 
+        growl = Growler.alloc().init()
+        growl.notify('UpShot started', 'and listening for screenshots!')
+
     def stopListening_(self, sender=None):
         """Stop listening to changes ot the screenshot dir."""
         if self.observer is not None:
@@ -183,6 +185,10 @@ class Upshot(NSObject):
             self.observer.join()
             self.observer = None
             log.debug('Stop listening for screenshots.')
+
+            growl = Growler.alloc().init()
+            growl.notify('UpShot paused',
+                         'Not listening for screenshots for now!')
         self.update_menu()
 
     def restart_(self, sender=None):
@@ -231,6 +237,7 @@ class ScreenshotHandler(FileSystemEventHandler):
         else:
             shared_name = os.path.basename(f)
             shutil.move(f, SHARE_DIR)
+            target_file = os.path.join(SHARE_DIR, shared_name)
 
         # Create shared URL
         url = urlparse.urljoin(
@@ -240,6 +247,22 @@ class ScreenshotHandler(FileSystemEventHandler):
 
         logging.debug('Copying to clipboard.')
         utils.pbcopy(url)
+
+        # Notify user.
+        growl = Growler.alloc().init()
+        growl.setCallback(self.notify_callback)
+        growl.notify('Screenshot shared!',
+                     'Your URL is: %s\n\n'
+                     'Click here to view file.' % url,
+                     context=target_file)
+
+    def notify_callback(self, filepath):
+        """
+        When growl notification is clicked, open Finder with shared file.
+        """
+        ws = NSWorkspace.sharedWorkspace()
+        ws.activateFileViewerSelectingURLs_(
+            NSArray.arrayWithObject_(NSURL.fileURLWithPath_(filepath)))
 
 
 if __name__ == '__main__':

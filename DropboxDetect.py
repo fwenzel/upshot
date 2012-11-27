@@ -22,8 +22,7 @@ class DropboxDetectWindowController(UpShotWindowController):
     okbutton = objc.IBOutlet()
 
     def awakeFromNib(self):
-        img = NSImage.alloc().initByReferencingFile_(
-            'resources/copy-public.png')
+        img = NSImage.alloc().initByReferencingFile_('copy-public.png')
         self.imgfield.setImage_(img)
 
     def showWindow_(self, sender):

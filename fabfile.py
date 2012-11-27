@@ -31,7 +31,7 @@ def build():
     sys.argv[1] = 'py2app'
 
     APP = ['upshot.py']
-    DATA_FILES = ['resources', ('', glob.glob('*.xib'))]
+    DATA_FILES = [('', glob.glob('resources/*')), ('', glob.glob('*.xib'))]
     OPTIONS = {
         'argv_emulation': False,
         # 'iconfile': 'resources/upshot.icns',
