@@ -118,6 +118,11 @@ class Upshot(NSObject):
         self.menu.addItem_(NSMenuItem.separatorItem())
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Open UpShot Project Website', 'website:', '')
+        self.menu.addItem_(m)
+        self.menuitems['website'] = m
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'About UpShot', 'about:', '')
         self.menu.addItem_(m)
         self.menuitems['about'] = m
@@ -155,6 +160,12 @@ class Upshot(NSObject):
         sw.openFile_(SHARE_DIR)
 
     def about_(self, sender=None):
+        """Open standard About dialog."""
+        app = NSApplication.sharedApplication()
+        app.activateIgnoringOtherApps_(True)
+        app.orderFrontStandardAboutPanel_(sender)
+
+    def website_(self, sender=None):
         """Open the UpShot homepage in a browser."""
         sw = NSWorkspace.sharedWorkspace()
         sw.openURL_(NSURL.URLWithString_(HOMEPAGE_URL))
