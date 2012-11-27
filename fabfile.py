@@ -34,11 +34,11 @@ def build():
     DATA_FILES = [('', glob.glob('resources/*')), ('', glob.glob('*.xib'))]
     OPTIONS = {
         'argv_emulation': False,
-        # 'iconfile': 'resources/upshot.icns',
+        'iconfile': 'resources/UpShot.icns',
         'plist': {
             'LSUIElement': 1,
             'NSPrincipalClass': 'UpShot',
-            'CFBundleShortVersionString': '0.1',
+            'CFBundleShortVersionString': RELEASE,
             'NSHumanReadableCopyright': 'Fred Wenzel',
             'CFBundleIdentifier': 'com.fredericiana.upshot',
         },
