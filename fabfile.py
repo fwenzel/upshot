@@ -58,6 +58,7 @@ def build():
 
 
 def make_dmg():
+    """Bundle the app into a DMG file."""
     if not os.path.exists(RUN_PATH):
         sys.stderr.write('Run `fab build` before you can build a DMG file.')
         sys.exit(1)
@@ -77,6 +78,8 @@ def make_dmg():
     dmgname = 'UpShot-%s.dmg' % RELEASE
     local('hdiutil convert template.sparseimage -format UDBZ -o ./dist/%s > '
           '/dev/null' % dmgname)
+    # "Internet-enable" it.
+    local('hdiutil internet-enable ./dist/%s' % dmgname)
 
     # Clean up.
     local('rm -f template.sparseimage')
