@@ -55,7 +55,7 @@ class PreferencesWindowController(UpShotWindowController):
     @objc.IBAction
     def dropboxDetect_(self, sender):
         """Open dropbox detection window."""
-        DropboxDetect.DropboxDetectWindowController.showWindow(self.app)
+        DropboxDetect.DropboxDetectWindowController.showWindow()
         self.close()
 
 

@@ -36,9 +36,6 @@ LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
 log = logging.getLogger('upshot')
 
-# NSApp object
-app = None
-
 # Local settings
 try:
     from settings_local import *
@@ -70,7 +67,7 @@ class Upshot(NSObject):
             self.startListening_()
         else:
             self.stopListening_()
-            DropboxDetect.DropboxDetectWindowController.showWindow(app)
+            DropboxDetect.DropboxDetectWindowController.showWindow()
 
     def build_menu(self):
         """Build the OS X status bar menu."""
@@ -128,7 +125,7 @@ class Upshot(NSObject):
         self.menu.addItem_(NSMenuItem.separatorItem())
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            'Quit UpShot', 'terminate:', '')
+            'Quit UpShot', 'quit:', '')
         self.menu.addItem_(m)
         self.menuitems['quit'] = m
 
@@ -163,7 +160,7 @@ class Upshot(NSObject):
         sw.openURL_(NSURL.URLWithString_(HOMEPAGE_URL))
 
     def openPreferences_(self, sender=None):
-        Preferences.PreferencesWindowController.showWindow(app)
+        Preferences.PreferencesWindowController.showWindow()
 
     def startListening_(self, sender=None):
         """Start listening for changes to the screenshot dir."""
@@ -195,11 +192,11 @@ class Upshot(NSObject):
         self.stopListening_()
         self.startListening_()
 
-    def terminate_(self, sender=None):
+    def quit_(self, sender=None):
         """Default quit event."""
         log.debug('Terminating.')
         self.stopListening_()
-        app.terminate_(sender)
+        NSApplication.sharedApplication().terminate_(sender)
 
 
 class ScreenshotHandler(FileSystemEventHandler):

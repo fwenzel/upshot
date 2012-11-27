@@ -60,8 +60,8 @@ class DropboxDetectWindowController(UpShotWindowController):
                 self.okbutton.setEnabled_(True)
                 self.window().makeFirstResponder_(self.okbutton)
                 # Show window up front.
-                if self.app:
-                    self.app.activateIgnoringOtherApps_(True)
+                app = NSApplication.sharedApplication()
+                app.activateIgnoringOtherApps_(True)
                 self.window().makeKeyAndOrderFront_(self)
 
     @objc.IBAction
@@ -75,7 +75,8 @@ class DropboxDetectWindowController(UpShotWindowController):
         if self.detected_id:
             set_pref('dropboxid', self.detected_id)
             # Start sharing.
-            self.app.delegate().restart_()
+            app = NSApplication.sharedApplication()
+            app.delegate().restart_()
         self.cancel_(sender)
 
     @objc.IBAction

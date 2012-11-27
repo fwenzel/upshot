@@ -6,7 +6,6 @@ from Foundation import *
 class UpShotWindowController(NSWindowController):
     """Common code for preferences window and others."""
     nibfile = None  # Must be overridden in subclasses.
-    app = None
     _singleton = None
 
     @classmethod
@@ -14,9 +13,10 @@ class UpShotWindowController(NSWindowController):
         """Create window as a singleton and return."""
         if not cls._singleton:
             cls._singleton = cls.alloc().init()
-        if app:
-            cls._singleton.app = app
-            app.activateIgnoringOtherApps_(True)
+
+        app = NSApplication.sharedApplication()
+        app.activateIgnoringOtherApps_(True)
+
         cls._singleton.window().center()
         cls._singleton.showWindow_(cls._singleton)
         return cls._singleton
