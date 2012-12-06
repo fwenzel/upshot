@@ -9,7 +9,7 @@ from fabric.api import local
 
 
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
-RELEASE = '0.9'
+RELEASE = '0.9.1'
 
 
 def clean():
@@ -38,9 +38,10 @@ def build():
         'plist': {
             'LSUIElement': 1,
             'NSPrincipalClass': 'UpShot',
-            'CFBundleShortVersionString': RELEASE,
             'NSHumanReadableCopyright': 'Fred Wenzel',
             'CFBundleIdentifier': 'com.fredericiana.upshot',
+            'CFBundleVersion': RELEASE,
+            'CFBundleShortVersionString': RELEASE,
         },
         'excludes': ['email']
     }

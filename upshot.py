@@ -11,7 +11,8 @@ import urlparse
 from AppKit import *
 from PyObjCTools import AppHelper
 
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import (FileCreatedEvent, FileMovedEvent,
+                             FileSystemEventHandler)
 from watchdog.observers import Observer
 
 import DropboxDetect
@@ -212,14 +213,25 @@ class Upshot(NSObject):
 
 class ScreenshotHandler(FileSystemEventHandler):
     """Handle file creation events in our screenshot dir."""
+    def on_created(self, event):
+        """File creation, handles screen clips."""
+        f = event.src_path
+        if isinstance(event, FileCreatedEvent) and not (
+            os.path.basename(f).startswith('.')):
+            self.handle_screenshot_candidate(f)
+
     def on_moved(self, event):
         """
-        Catch move event: OS X creates a temp file, then moves it to its
-        final name.
+        Catch move event: For full screenshots, OS X creates a temp file,
+        then moves it to its final name.
         """
-        f = event.dest_path
+        if not isinstance(event, FileMovedEvent):
+            return
+        self.handle_screenshot_candidate(event.dest_path)
 
-        # The moved file could be anything. Only act if it's a screenshot.
+    def handle_screenshot_candidate(self, f):
+        """Given a candidate file, handle it if it's a screenshot."""
+        # The file could be anything. Only act if it's a screenshot.
         if not utils.is_screenshot(f):
             return
 
