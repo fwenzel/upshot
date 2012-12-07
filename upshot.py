@@ -29,6 +29,7 @@ DROPBOX_DIR = utils.detect_dropbox_folder()
 SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
 
 HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
+DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
 
 SHARE_URL = 'http://dl.dropbox.com/u/{dropboxid}/Screenshots/'
 
@@ -60,7 +61,23 @@ class Upshot(NSObject):
             alert('Unable to detect Dropbox folder',
                   'UpShot requires Dropbox, for now. Please install it, then '
                   'try again.', ['OK'])
-            self.terminate_(self)
+            self.quit_(self)
+
+        if not os.path.exists(SHARE_DIR):  # No public folder?
+            pressed = alert(
+                'Unable to detect Public Dropbox folder',
+                'UpShot requires a Dropbox Public folder. You seem to have '
+                'Dropbox, but no Public folder.\n\n'
+                'Since October 2012, Dropbox will only create a public '
+                'folder for you if you opt in to it.\n\n'
+                'Please do so before using UpShot.',
+                ['Learn How to Create a Dropbox Public Folder',
+                 'Quit UpShot'])
+            if pressed == NSAlertFirstButtonReturn:
+                # Open Dropboc opt-in
+                sw = NSWorkspace.sharedWorkspace()
+                sw.openURL_(NSURL.URLWithString_(DROPBOX_PUBLIC_INFO))
+            self.quit_(self)
 
         self.build_menu()
         # Go do something useful.
