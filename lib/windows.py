@@ -14,8 +14,7 @@ class UpShotWindowController(NSWindowController):
         if not cls._singleton:
             cls._singleton = cls.alloc().init()
 
-        app = NSApplication.sharedApplication()
-        app.activateIgnoringOtherApps_(True)
+        NSApp.activateIgnoringOtherApps_(True)
 
         cls._singleton.window().center()
         cls._singleton.showWindow_(cls._singleton)
