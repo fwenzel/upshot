@@ -93,9 +93,11 @@ class Upshot(NSObject):
         statusbar = NSStatusBar.systemStatusBar()
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
 
-        # Load images and set initial icon.
+        # Set statusbar icon and color/grayscale mode.
         for tag, img in self.image_paths.items():
             self.images[tag] = NSImage.alloc().initByReferencingFile_(img)
+            self.images[tag].setTemplate_(
+                utils.get_pref('iconset') == 'grayscale')
         self.statusitem.setImage_(self.images['icon16'])
 
         self.statusitem.setHighlightMode_(1)
@@ -158,6 +160,10 @@ class Upshot(NSObject):
         """Update status bar menu based on app status."""
         if self.statusitem is None:
             return
+
+        # Apply iconset
+        self.images['icon16'].setTemplate_(
+            utils.get_pref('iconset') == 'grayscale')
 
         running = (self.observer is not None)
         self.statusitem.setImage_(self.images['icon16' if running else

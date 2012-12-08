@@ -4,6 +4,7 @@ UpShot Changelog
 master
 ------
 * Help users create public folders if they do not already have one. Fix #29.
+* Add grayscale menu bar icon as a preference. Fix #31.
 * Some code cosmetics.
 
 v0.9.1 (12/5/2012)
