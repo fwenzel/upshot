@@ -3,12 +3,14 @@ import os
 import random
 import string
 from functools import wraps
+from urlparse import urljoin
 
 from Foundation import *
 from AppKit import *
 
 
 CHARS = string.ascii_letters + string.digits
+DEFAULT_SHARE_URL = 'http://dl.dropbox.com/u/{dropboxid}/Screenshots/'
 
 
 def autopooled(f):
@@ -68,6 +70,19 @@ def pbcopy(s):
 def randname(length=4):
     """Generate random (file) name."""
     return ''.join(random.choice(CHARS) for i in xrange(length))
+
+
+def share_url(filename, url=None):
+    """Get the URL a file will be shared under."""
+    if url is None:  # Get pref. Otherwise use passed-in URL fragment.
+        url = get_pref('customurl')
+
+    if url:  # Custom URL
+        return urljoin(url, filename)
+    else:  # Default URL.
+        return urljoin(
+            DEFAULT_SHARE_URL.format(dropboxid=get_pref('dropboxid')),
+            filename)
 
 
 @autopooled

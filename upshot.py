@@ -31,8 +31,6 @@ SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
 HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
 DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
 
-SHARE_URL = 'http://dl.dropbox.com/u/{dropboxid}/Screenshots/'
-
 # Set up logging
 LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
@@ -283,9 +281,7 @@ class ScreenshotHandler(FileSystemEventHandler):
             target_file = os.path.join(SHARE_DIR, shared_name)
 
         # Create shared URL
-        url = urlparse.urljoin(
-            SHARE_URL.format(dropboxid=utils.get_pref('dropboxid')),
-            urllib.quote(shared_name))
+        url = utils.share_url(urllib.quote(shared_name))
         logging.debug('Share URL is %s' % url)
 
         logging.debug('Copying to clipboard.')

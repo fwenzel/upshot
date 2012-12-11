@@ -3,8 +3,12 @@ UpShot Changelog
 
 master
 ------
+
+v1.0.0 (12/11/2012)
+-------------------
 * Help users create public folders if they do not already have one. Fix #29.
 * Add grayscale menu bar icon as a preference. Fix #31.
+* Made share URLs customizable. Fix issue #16.
 * Some code cosmetics.
 
 v0.9.1 (12/5/2012)
