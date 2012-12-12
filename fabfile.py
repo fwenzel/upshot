@@ -2,14 +2,19 @@ import glob
 import os
 import platform
 import sys
+from tempfile import mkdtemp
 
 from setuptools import setup
 
 from fabric.api import local
+from fabric.context_managers import lcd
 
 
+HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
 RELEASE = '1.0.0'
+
+path = lambda *a: os.path.join(HERE, *a)
 
 
 def clean():
@@ -63,27 +68,29 @@ def make_dmg():
     if not os.path.exists(RUN_PATH):
         sys.stderr.write('Run `fab build` before you can build a DMG file.')
         sys.exit(1)
-    # XXX Should probably do all this in a temp dir.
 
-    # Unzip and mount template spareseimage.
-    local('unzip -o dmg-template/template.sparseimage.zip')
-    local('hdiutil mount template.sparseimage')
+    tmpdir = mkdtemp()
+    with lcd(tmpdir):
+        # Unzip and mount template sparseimage.
+        local('unzip -o "%s"' % path('dmg-template',
+                                   'template.sparseimage.zip'))
+        local('hdiutil mount template.sparseimage')
 
-    # Copy build into sparseimage.
-    local('cp -a dist/UpShot.app /Volumes/UpShot/')
+        # Copy build into sparseimage.
+        local('cp -a "%s" /Volumes/UpShot/' % path('dist', 'UpShot.app'))
 
-    # Unmount this.
-    local('hdiutil eject /Volumes/UpShot')
+        # Unmount this.
+        local('hdiutil eject /Volumes/UpShot')
 
-    # Make a DMG out of it.
-    dmgname = 'UpShot-%s.dmg' % RELEASE
-    local('hdiutil convert template.sparseimage -format UDBZ -o ./dist/%s > '
-          '/dev/null' % dmgname)
-    # "Internet-enable" it.
-    local('hdiutil internet-enable ./dist/%s' % dmgname)
+        # Make a DMG out of it.
+        dmgname = 'UpShot-%s.dmg' % RELEASE
+        local('hdiutil convert template.sparseimage -format UDBZ '
+              '-o "%s" > /dev/null' % path('dist', dmgname))
+        # "Internet-enable" it.
+        local('hdiutil internet-enable "%s"' % path('dist', dmgname))
 
     # Clean up.
-    local('rm -f template.sparseimage')
+    local('rm -rf "%s"' % tmpdir)
 
 
 def run():
