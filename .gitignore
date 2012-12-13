@@ -2,3 +2,4 @@
 settings_local\.py
 build/
 dist/
+_site/
