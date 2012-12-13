@@ -14,7 +14,7 @@ HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
 RELEASE = '1.0.0'
 
-path = lambda *a: os.path.join(HERE, *a)
+_path = lambda *a: os.path.join(HERE, *a)
 
 
 def clean():
@@ -72,12 +72,12 @@ def make_dmg():
     tmpdir = mkdtemp()
     with lcd(tmpdir):
         # Unzip and mount template sparseimage.
-        local('unzip -o "%s"' % path('dmg-template',
+        local('unzip -o "%s"' % _path('dmg-template',
                                    'template.sparseimage.zip'))
         local('hdiutil mount template.sparseimage')
 
         # Copy build into sparseimage.
-        local('cp -a "%s" /Volumes/UpShot/' % path('dist', 'UpShot.app'))
+        local('cp -a "%s" /Volumes/UpShot/' % _path('dist', 'UpShot.app'))
 
         # Unmount this.
         local('hdiutil eject /Volumes/UpShot')
@@ -85,9 +85,9 @@ def make_dmg():
         # Make a DMG out of it.
         dmgname = 'UpShot-%s.dmg' % RELEASE
         local('hdiutil convert template.sparseimage -format UDBZ '
-              '-o "%s" > /dev/null' % path('dist', dmgname))
+              '-o "%s" > /dev/null' % _path('dist', dmgname))
         # "Internet-enable" it.
-        local('hdiutil internet-enable "%s"' % path('dist', dmgname))
+        local('hdiutil internet-enable "%s"' % _path('dist', dmgname))
 
     # Clean up.
     local('rm -rf "%s"' % tmpdir)
