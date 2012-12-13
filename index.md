@@ -12,7 +12,7 @@ layout: default
 
 <div id="dlbutton">
 <a href="#" class="button">Download UpShot</a>
-<p>version 1.0, 12/12/2012</p>
+<p>.dmg file, version 1.0, 12/12/2012</p>
 </div>
 
 ### Installing UpShot
