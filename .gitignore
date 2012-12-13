@@ -1,2 +1,5 @@
 \.DS_Store
 _site/
+build/
+dist/
+*.py[oc]
