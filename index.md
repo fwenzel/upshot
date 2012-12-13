@@ -20,9 +20,10 @@ layout: default
 * drag the UpShot app into your ``/Applications`` directory (overwrite the existing version when updating).
 * go to the Applications directory and start UpShot from there. UpShot will show up in your status bar in the top right corner of the screen.
 
-{% comment %}
-### Feature Summary
-{% endcomment %}
+### Screenshots
+<div id="screenshots">
+<a href="images/upshot-menu.png" rel="lightbox" title="The main titlebar menu"><img src="images/upshot-menu.png"></a>
+</div>
 
 ### Version History
 For a summary of what changed between versions, check out the [changelog][changelog].
