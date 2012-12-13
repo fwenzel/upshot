@@ -30,7 +30,7 @@ def autopooled(f):
 def detect_dropbox_folder():
     """
     Find user's dropbox folder location.
-    They keep it base64-encoded in a file 'hosts.db' in $HOME/.dropbox.
+    They keep it base64-encoded in a file 'host.db' in $HOME/.dropbox.
     """
     try:
         with open(os.path.join(os.environ['HOME'], '.dropbox', 'host.db'),
