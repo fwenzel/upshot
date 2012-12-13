@@ -8,7 +8,7 @@ versions:
 
 **UpShot** combines the power of OS X's built-in screenshot functionality with Dropbox. This makes UpShot the easiest way to automatically upload and share screenshots on OS X.
 
-**It's as easy as 1 - 2 - 3!**
+**UpShot in three easy steps:**
 
 1. You **take a screenshot**
 2. The screenshot URL shows up in your clipboard, **ready to be pasted** wherever you want.
