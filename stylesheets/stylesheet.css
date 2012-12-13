@@ -294,7 +294,7 @@ Full-Width Styles
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+  padding: 30px 10px 10px;
 }
 
 #project_title {
@@ -466,11 +466,14 @@ header h1 {
 }
 
 #screenshots img {
+  margin: .5em;
+  max-width: 100px;
+  vertical-align: middle;
   width: auto;
 }
 
 #lightbox img {
+  box-shadow: none;
   padding: 0;
   margin: 0;
-  box-shadow: none;
 }

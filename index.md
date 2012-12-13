@@ -1,5 +1,9 @@
 ---
 layout: default
+versions:
+- [1.0, 12/13/2012]
+- [0.9.1, 12/5/2012]
+- [0.9, 11/25/2012]
 ---
 
 **UpShot** combines the power of OS X's built-in screenshot functionality with Dropbox. This makes UpShot the easiest way to automatically upload and share screenshots on OS X.
@@ -11,8 +15,8 @@ layout: default
 3. Actually, there is no step 3!
 
 <div id="dlbutton">
-<a href="#" class="button">Download UpShot</a>
-<p>.dmg file, version 1.0, 12/12/2012</p>
+<a href="'http://dl.upshot.it/UpShot-{{ page.versions|first|first }}.dmg" class="button">Download UpShot</a>
+<p>.dmg file, version {{ page.versions|first|first }}, {{ page.versions|first|last}}</p>
 </div>
 
 ### Installing UpShot
@@ -22,7 +26,8 @@ layout: default
 
 ### Screenshots
 <div id="screenshots">
-<a href="images/upshot-menu.png" rel="lightbox" title="The main titlebar menu"><img src="images/upshot-menu.png"></a>
+<a href="images/upshot-menu.png" rel="lightbox[s]" title="The main titlebar menu"><img src="images/upshot-menu.png"></a>
+<a href="images/preferences.png" rel="lightbox[s]" title="UpShot's preferences screen"><img src="images/preferences.png"></a>
 </div>
 
 ### Version History
@@ -30,12 +35,11 @@ For a summary of what changed between versions, check out the [changelog][change
 
 If you know what you're doing, you may download previous versions here:
 
-* [v1.0 (12/12/2012)][1.0]
-* [v0.9.1 (12/5/2012)][0.9.1]
-* [v0.9 (11/25/2012)][0.9]
+{% for v in page.versions %}
+* [v{{ v|first }} ({{ v|last }})](http://dl.upshot.it/UpShot-{{ v|first }}.dmg){% endfor %}
 
 [changelog]: https://github.com/fwenzel/upshot/blob/master/CHANGELOG.md
-[1.0]: #
+[1.0]: {{ latest }}
 [0.9.1]: http://dl.upshot.it/UpShot-0.9.1.dmg
 [0.9]: http://dl.upshot.it/UpShot-0.9.dmg
 
