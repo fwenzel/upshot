@@ -3,10 +3,14 @@ UpShot Changelog
 
 master
 ------
+
+v1.0.1 (12/15/2012)
+-------------------
 * Change project website link to upshot.it. Fix #34.
 * Only handle files for 15 seconds after their creation, to not suck in files we did not create. Fix #26.
+* Don't complain if a Screenshots folder does not exist. Fix #35.
 
-v1.0.0 (12/13/2012)
+v1.0 (12/13/2012)
 -------------------
 * Help users create public folders if they do not already have one. Fix #29.
 * Add grayscale menu bar icon as a preference. Fix #31.
