@@ -3,6 +3,7 @@ UpShot Changelog
 
 master
 ------
+* Change project website link to upshot.it. Fix #34.
 
 v1.0.0 (12/13/2012)
 -------------------

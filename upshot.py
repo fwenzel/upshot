@@ -28,7 +28,7 @@ SCREENSHOT_DIR = utils.get_pref(
 DROPBOX_DIR = utils.detect_dropbox_folder()
 SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
 
-HOMEPAGE_URL = 'http://github.com/fwenzel/upshot'
+HOMEPAGE_URL = 'http://upshot.it'
 DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
 
 # Set up logging
