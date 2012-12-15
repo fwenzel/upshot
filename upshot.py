@@ -31,6 +31,8 @@ SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
 HOMEPAGE_URL = 'http://upshot.it'
 DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
 
+TIME_THRESHOLD = 15  # How many seconds after creation do we handle a file?
+
 # Set up logging
 LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
@@ -252,6 +254,11 @@ class ScreenshotHandler(FileSystemEventHandler):
 
     def handle_screenshot_candidate(self, f):
         """Given a candidate file, handle it if it's a screenshot."""
+        # Do not act on files that are too old (so we don't swallow files
+        # that are not new screenshots).
+        if os.path.getctime(f) - time.time() > TIME_THRESHOLD:
+            return
+
         # The file could be anything. Only act if it's a screenshot.
         if not utils.is_screenshot(f):
             return

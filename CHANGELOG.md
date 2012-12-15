@@ -4,6 +4,7 @@ UpShot Changelog
 master
 ------
 * Change project website link to upshot.it. Fix #34.
+* Only handle files for 15 seconds after their creation, to not suck in files we did not create. Fix #26.
 
 v1.0.0 (12/13/2012)
 -------------------
