@@ -26,7 +26,8 @@ SCREENSHOT_DIR = utils.get_pref(
     domain='com.apple.screencapture', key='location',
     default=os.path.join(os.environ['HOME'], 'Desktop'))
 DROPBOX_DIR = utils.detect_dropbox_folder()
-SHARE_DIR = os.path.join(DROPBOX_DIR or '', 'Public', 'Screenshots')
+PUBLIC_DIR = os.path.join(DROPBOX_DIR or '', 'Public')
+SHARE_DIR = os.path.join(PUBLIC_DIR, 'Screenshots')
 
 HOMEPAGE_URL = 'http://upshot.it'
 DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
@@ -63,7 +64,7 @@ class Upshot(NSObject):
                   'try again.', ['OK'])
             self.quit_(self)
 
-        if not os.path.exists(SHARE_DIR):  # No public folder?
+        if not os.path.exists(PUBLIC_DIR):  # No public folder?
             pressed = alert(
                 'Unable to detect Public Dropbox folder',
                 'UpShot requires a Dropbox Public folder. You seem to have '
