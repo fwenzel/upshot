@@ -10,7 +10,7 @@ from AppKit import *
 
 
 CHARS = string.ascii_letters + string.digits
-DEFAULT_SHARE_URL = 'http://dl.dropbox.com/u/{dropboxid}/Screenshots/'
+DEFAULT_SHARE_URL = 'http://dl.dropboxusercontent.com/u/{dropboxid}/Screenshots/'
 
 
 def autopooled(f):
