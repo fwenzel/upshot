@@ -12,7 +12,7 @@ from fabric.context_managers import lcd
 
 HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
-RELEASE = '1.0.1'
+RELEASE = '1.1'
 
 _path = lambda *a: os.path.join(HERE, *a)
 
