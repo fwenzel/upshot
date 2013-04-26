@@ -9,7 +9,7 @@ from lib.utils import detect_dropbox_folder, set_pref
 from lib.windows import UpShotWindowController
 
 
-DROPBOX_URL_RE = re.compile(r'^https?://dl.dropbox.com/u/(\d+)/.*')
+DROPBOX_URL_RE = re.compile(r'^https?://dl.dropbox(?:usercontent)?.com/u/(\d+)/.*')
 
 
 class DropboxDetectWindowController(UpShotWindowController):
