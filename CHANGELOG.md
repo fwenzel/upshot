@@ -4,6 +4,12 @@ UpShot Changelog
 master
 ------
 
+v1.1 (4/26/2013)
+----------------
+* Dropbox v2 support:
+  * Detect user ID out of Dropbox v2 urls. Fix #46.
+  * Generate dropboxusercontent.com URLs by default.
+
 v1.0.1 (12/15/2012)
 -------------------
 * Change project website link to upshot.it. Fix #34.
