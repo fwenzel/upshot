@@ -281,7 +281,6 @@ class ScreenshotHandler(FileSystemEventHandler):
                     break
         else:
             shared_name = os.path.basename(f)
-            shutil.move(f, SHARE_DIR)
             target_file = os.path.join(SHARE_DIR, shared_name)
 
         # Move/copy file there.
