@@ -255,7 +255,7 @@ class ScreenshotHandler(FileSystemEventHandler):
 
     def handle_screenshot_candidate(self, f):
         """Given a candidate file, handle it if it's a screenshot."""
-        # Do not act on files that are too old (so we don't swallow files
+        # Do not act on files that are too old (so we don't swallow old files
         # that are not new screenshots).
         if os.path.getctime(f) - time.time() > TIME_THRESHOLD:
             return
@@ -269,7 +269,7 @@ class ScreenshotHandler(FileSystemEventHandler):
             log.debug('Creating share dir %s' % SHARE_DIR)
             os.makedirs(SHARE_DIR)
 
-        # Move image file to target dir.
+        # Determine target filename in share directory.
         log.debug('Moving %s to %s' % (f, SHARE_DIR))
         if utils.get_pref('randomize'):  # Randomize file names?
             ext = os.path.splitext(f)[1]
@@ -278,17 +278,24 @@ class ScreenshotHandler(FileSystemEventHandler):
                 target_file = os.path.join(SHARE_DIR, shared_name)
                 if not os.path.exists(target_file):
                     log.debug('New file name is: %s' % shared_name)
-                    if utils.get_pref('copyonly'):
-                        shutil.copy(f, target_file)
-                    else:
-                        shutil.move(f, target_file)
                     break
         else:
             shared_name = os.path.basename(f)
             shutil.move(f, SHARE_DIR)
             target_file = os.path.join(SHARE_DIR, shared_name)
 
-        # Create shared URL
+        # Move/copy file there.
+        if (utils.get_pref('retinascale') and
+            utils.resampleRetinaImage(f, target_file)):
+            if not utils.get_pref('copyonly'):
+                os.unlink(f)
+        else:
+            if utils.get_pref('copyonly'):
+                shutil.copy(f, target_file)
+            else:
+                shutil.move(f, target_file)
+
+        # Create shared URL.
         url = utils.share_url(urllib.quote(shared_name))
         logging.debug('Share URL is %s' % url)
 

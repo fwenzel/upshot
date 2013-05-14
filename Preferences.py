@@ -12,6 +12,7 @@ DEFAULTS = {
     'iconset': 'default',  # Which status bar icon? 'default' or 'grayscale'
     'randomize': True,  # Randomize screenshot names?
     'copyonly': False,  # Copy (don't move) screen shots.
+    'retinascale': False,  # Scale upscaled retina images to low DPI automatically.
     'customurl': '',  # Empty string means: default Dropbox URL.
 }
 DOMAIN_HELP_URL = ('http://fredericiana.com/2012/12/09/'
@@ -29,6 +30,7 @@ class PreferencesWindowController(UpShotWindowController):
     # Screenshots
     randomize = objc.IBOutlet()
     copyonly = objc.IBOutlet()
+    retinascale = objc.IBOutlet()
 
     # Dropbox metadata
     dropboxdir = objc.IBOutlet()
@@ -51,6 +53,7 @@ class PreferencesWindowController(UpShotWindowController):
 
         self.randomize.setState_(get_pref('randomize'))
         self.copyonly.setState_(get_pref('copyonly'))
+        self.copyonly.setState_(get_pref('retinascale'))
 
         dropboxdir = detect_dropbox_folder()
         self.dropboxdir.setStringValue_(
@@ -88,6 +91,7 @@ class PreferencesWindowController(UpShotWindowController):
 
         set_pref('randomize', bool(self.randomize.state()))
         set_pref('copyonly', bool(self.copyonly.state()))
+        set_pref('retinascale', bool(self.retinascale.state()))
 
         try:
             set_pref('dropboxid', int(self.dropboxid.stringValue()))

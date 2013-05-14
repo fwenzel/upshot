@@ -3,6 +3,7 @@ UpShot Changelog
 
 master
 ------
+* Allow auto-scaling of retina screenshots down to 72dpi. Fix #44.
 
 v1.1 (4/26/2013)
 ----------------

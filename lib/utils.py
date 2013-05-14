@@ -3,6 +3,7 @@ import os
 import random
 import string
 from functools import wraps
+from subprocess import check_output
 from urlparse import urljoin
 
 from Foundation import *
@@ -56,6 +57,35 @@ def is_screenshot(filename):
         return isinstance(plist, bool) and plist
     except (TypeError, KeyError):
         return False
+
+
+def resampleRetinaImage(filename, target):
+    """
+    Resample high DPI image ``filename`` to 72 dpi image ``target``.
+
+    Uses ``sips``, which ships with OS X.
+
+    Returns bool whether image was resampled successfully.
+    """
+    sips = '/usr/bin/sips'  # Safe to hard-code, I hope.
+    # Extract image properties from sips.
+    sipsinfo = lambda prop: check_output(
+        [sips, '-g', prop, filename]).split(': ')[1].strip()
+
+    # Detect current DPI.
+    dpi = float(sipsinfo('dpiWidth'))
+    if int(dpi) == 72:  # Nothing to do here.
+        NSLog('File %s was already 72 dpi, nothing to resample.' % filename)
+        return False
+
+    # Determine current / target width and resample.
+    cur_width = float(sipsinfo('pixelWidth'))
+    target_width = int(72 / dpi * cur_width)
+
+    check_output([sips, '--resampleWidth', str(target_width), filename,
+                 '--out', target])
+    NSLog('Resampled %s from %s dpi to 72.' % (filename, dpi))
+    return True
 
 
 @autopooled
