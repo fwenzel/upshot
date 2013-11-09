@@ -9,12 +9,15 @@ from setuptools import setup
 from fabric.api import local
 from fabric.context_managers import lcd
 
+RELEASE = '1.1'
 
 HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
-RELEASE = '1.1'
+DMGNAME = 'UpShot-%s.dmg' % RELEASE
+OPENSSL = '/usr/bin/openssl'
 
 _path = lambda *a: os.path.join(HERE, *a)
+_err = lambda s: sys.stderr.write('%s\n' % s)
 
 
 def clean():
@@ -26,7 +29,7 @@ def clean():
 def build():
     """Build executable via py2app."""
     if platform.system() != 'Darwin':
-        print 'Sorry, only works on Mac OS X!'
+        _err('Sorry, only works on Mac OS X!')
         sys.exit(1)
 
     # Clean up old build dir.
@@ -40,14 +43,17 @@ def build():
     OPTIONS = {
         'argv_emulation': False,
         'iconfile': 'resources/UpShot.icns',
-        'plist': {
+        'plist': {  # Usually info.plist, we'll do it inline.
             'LSUIElement': 1,
             'NSPrincipalClass': 'UpShot',
             'NSHumanReadableCopyright': 'Fred Wenzel',
             'CFBundleIdentifier': 'com.fredericiana.upshot',
             'CFBundleVersion': RELEASE,
             'CFBundleShortVersionString': RELEASE,
+            # Sparkle settings:
+            'SUFeedURL': 'http://upshot.it/updates.xml',
         },
+        #'frameworks': glob.glob('resources/*.framework'),
         'excludes': ['email']
     }
 
@@ -66,7 +72,7 @@ def build():
 def make_dmg():
     """Bundle the app into a DMG file."""
     if not os.path.exists(RUN_PATH):
-        sys.stderr.write('Run `fab build` before you can build a DMG file.')
+        _err('Run `fab build` before you can build a DMG file.')
         sys.exit(1)
 
     tmpdir = mkdtemp()
@@ -83,19 +89,37 @@ def make_dmg():
         local('hdiutil eject /Volumes/UpShot')
 
         # Make a DMG out of it.
-        dmgname = 'UpShot-%s.dmg' % RELEASE
         local('hdiutil convert template.sparseimage -format UDBZ '
-              '-o "%s" > /dev/null' % _path('dist', dmgname))
+              '-o "%s" > /dev/null' % _path('dist', DMGNAME))
         # "Internet-enable" it.
-        local('hdiutil internet-enable "%s"' % _path('dist', dmgname))
+        local('hdiutil internet-enable "%s"' % _path('dist', DMGNAME))
 
     # Clean up.
     local('rm -rf "%s"' % tmpdir)
 
 
+def sign(private_key=os.path.expanduser('~/.ssh/id_dsa')):
+    """Calculate .dmg file signature for automatic update service."""
+    dmg_file = _path('dist', DMGNAME)
+
+    if not os.path.exists(dmg_file):
+        _err('Run `fab make_dmg` before you can sign the DMG file.')
+        sys.exit(1)
+
+    if not os.path.exists(private_key):
+        _err('Private key file %s not found. Choose your own with `fab '
+             'sign:<private_key>`')
+        sys.exit(1)
+
+    local('{openssl} dgst -sha1 -binary < "{dmg}" | '
+          '{openssl} dgst -dss1 -sign "{key}" | '
+          '{openssl} enc -base64'.format(openssl=OPENSSL, dmg=dmg_file,
+                                         key=private_key))
+
+
 def run():
     """Run an already built instance of UpShot."""
     if not os.path.exists(RUN_PATH):
-        sys.stderr.write('Run `fab build` before you can run UpShot.')
+        _err('Run `fab build` before you can run UpShot.')
         sys.exit(1)
     local(RUN_PATH)

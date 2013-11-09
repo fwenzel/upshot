@@ -322,6 +322,9 @@ if __name__ == '__main__':
     # Prepare preferences service.
     Preferences.set_defaults()
 
+    # Check for updates.
+    utils.auto_update()
+
     app = NSApplication.sharedApplication()
     delegate = Upshot.alloc().init()
     app.setDelegate_(delegate)
