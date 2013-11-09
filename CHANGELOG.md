@@ -3,6 +3,9 @@ UpShot Changelog
 
 master
 ------
+
+v2.0 (11/9/2013)
+----------------
 * Allow auto-scaling of retina screenshots down to 72dpi. Fix #44.
 * Add automated update service (Sparkle!). Fix #14.
 * Do not say "paused" when quitting. Fix #51.
