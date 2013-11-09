@@ -52,6 +52,7 @@ def build():
             'CFBundleShortVersionString': RELEASE,
             # Sparkle settings:
             'SUFeedURL': 'http://upshot.it/updates.xml',
+            'SUPublicDSAKeyFile': 'dsa_pub.pem',
         },
         #'frameworks': glob.glob('resources/*.framework'),
         'excludes': ['email']
@@ -98,7 +99,7 @@ def make_dmg():
     local('rm -rf "%s"' % tmpdir)
 
 
-def sign(private_key=os.path.expanduser('~/.ssh/id_dsa')):
+def sign(private_key=os.path.expanduser('~/dsa_priv.pem')):
     """Calculate .dmg file signature for automatic update service."""
     dmg_file = _path('dist', DMGNAME)
 
@@ -108,7 +109,7 @@ def sign(private_key=os.path.expanduser('~/.ssh/id_dsa')):
 
     if not os.path.exists(private_key):
         _err('Private key file %s not found. Choose your own with `fab '
-             'sign:<private_key>`')
+             'sign:<private_key>`' % private_key)
         sys.exit(1)
 
     local('{openssl} dgst -sha1 -binary < "{dmg}" | '
