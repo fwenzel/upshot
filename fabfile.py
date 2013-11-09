@@ -73,7 +73,7 @@ def make_dmg():
     with lcd(tmpdir):
         # Unzip and mount template sparseimage.
         local('unzip -o "%s"' % _path('dmg-template',
-                                   'template.sparseimage.zip'))
+                                      'template.sparseimage.zip'))
         local('hdiutil mount template.sparseimage')
 
         # Copy build into sparseimage.
