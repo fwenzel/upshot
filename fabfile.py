@@ -9,7 +9,7 @@ from setuptools import setup
 from fabric.api import local
 from fabric.context_managers import lcd
 
-RELEASE = '1.1'
+RELEASE = '2.0'
 
 HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
