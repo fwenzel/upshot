@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>UpShot.it Changelog</title>
+      <link>http://upshot.it/updates.xml</link>
+      <description>Updates to the UpShot automatic screenshot uploader.</description>
+      <language>en</language>
+      <item>
+        <title>Version 2.0</title>
+        <description>
+         * Allow auto-scaling of retina screenshots down to 72dpi. Fix #44.
+         * Add automated update service (Sparkle!). Fix #14.
+         * Do not say "paused" when quitting. Fix #51.
+        </description>
+        <pubDate>Fri, 9 Nov 2013 0:00:00 +0000</pubDate>
+        <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
+        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5404390" type="application/octet-stream" sparkle:dsaSignature="MCwCFBB6Mak2g2pHyS6kziaNcJtT9Zs4AhQvdlEY8w9anIdQ46CNhUUyj2C5vw==" />
+      </item>
+      <item>
+        <title>Version 1.1</title>
+		  <description>
+        * Dropbox v2 support:
+          * Detect user ID out of Dropbox v2 urls. Fix #46.
+          * Generate dropboxusercontent.com URLs by default.
+        </description>
+        <pubDate>Fri, 26 Apr 2013 0:00:00 +0000</pubDate>
+        <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
+        <enclosure url="http://dl.upshot.it/UpShot-1.1.dmg" sparkle:version="2.0" length="4543243" type="application/octet-stream" sparkle:dsaSignature="MC0CFQDY1LEU22TsvJnfEv3jjraAWhdiCQIUd8qczhl1ocH9rRvQnNWr9tbZlNI=" />
+      </item>
+   </channel>
+</rss>
