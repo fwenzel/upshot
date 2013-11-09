@@ -220,8 +220,12 @@ class Upshot(NSObject):
             log.debug('Stop listening for screenshots.')
 
             growl = Growler.alloc().init()
-            growl.notify('UpShot paused',
-                         'Not listening for screenshots for now!')
+            if sender == self.menuitems['quit']:
+                growl.notify('UpShot shutting down',
+                             'Not listening for screenshots anymore!')
+            else:
+                growl.notify('UpShot paused',
+                             'Not listening for screenshots for now!')
         self.update_menu()
 
     def restart_(self, sender=None):
@@ -231,7 +235,7 @@ class Upshot(NSObject):
     def quit_(self, sender=None):
         """Default quit event."""
         log.debug('Terminating.')
-        self.stopListening_()
+        self.stopListening_(sender)
         NSApplication.sharedApplication().terminate_(sender)
 
 

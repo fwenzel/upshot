@@ -5,6 +5,7 @@ master
 ------
 * Allow auto-scaling of retina screenshots down to 72dpi. Fix #44.
 * Add automated update service (Sparkle!). Fix #14.
+* Do not say "paused" when quitting. Fix #51.
 
 v1.1 (4/26/2013)
 ----------------
