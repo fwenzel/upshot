@@ -14,18 +14,7 @@
         </description>
         <pubDate>Fri, 9 Nov 2013 0:00:00 +0000</pubDate>
         <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
-        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5404390" type="application/octet-stream" sparkle:dsaSignature="MCwCFBB6Mak2g2pHyS6kziaNcJtT9Zs4AhQvdlEY8w9anIdQ46CNhUUyj2C5vw==" />
-      </item>
-      <item>
-        <title>Version 1.1</title>
-		  <description>
-        * Dropbox v2 support:
-          * Detect user ID out of Dropbox v2 urls. Fix #46.
-          * Generate dropboxusercontent.com URLs by default.
-        </description>
-        <pubDate>Fri, 26 Apr 2013 0:00:00 +0000</pubDate>
-        <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
-        <enclosure url="http://dl.upshot.it/UpShot-1.1.dmg" sparkle:version="2.0" length="4543243" type="application/octet-stream" sparkle:dsaSignature="MC0CFQDY1LEU22TsvJnfEv3jjraAWhdiCQIUd8qczhl1ocH9rRvQnNWr9tbZlNI=" />
+        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5408679" type="application/octet-stream" sparkle:dsaSignature="MC0CFQCf6UfDknKDHFT7MlAIS7yFrHov0wIUIicMCcQO0ES6MPcUPvcd6B/J2/Q=" />
       </item>
    </channel>
 </rss>
