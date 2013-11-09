@@ -59,6 +59,20 @@ def is_screenshot(filename):
         return False
 
 
+@autopooled
+def pbcopy(s):
+    """Copy text to the OS X clipboard."""
+    pb = NSPasteboard.generalPasteboard()
+    pb.clearContents()
+    a = NSArray.arrayWithObject_(s)
+    pb.writeObjects_(a)
+
+
+def randname(length=4):
+    """Generate random (file) name."""
+    return ''.join(random.choice(CHARS) for i in xrange(length))
+
+
 def resampleRetinaImage(filename, target):
     """
     Resample high DPI image ``filename`` to 72 dpi image ``target``.
@@ -86,20 +100,6 @@ def resampleRetinaImage(filename, target):
                  '--out', target])
     NSLog('Resampled %s from %s dpi to 72.' % (filename, dpi))
     return True
-
-
-@autopooled
-def pbcopy(s):
-    """Copy text to the OS X clipboard."""
-    pb = NSPasteboard.generalPasteboard()
-    pb.clearContents()
-    a = NSArray.arrayWithObject_(s)
-    pb.writeObjects_(a)
-
-
-def randname(length=4):
-    """Generate random (file) name."""
-    return ''.join(random.choice(CHARS) for i in xrange(length))
 
 
 def share_url(filename, url=None):
