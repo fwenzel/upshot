@@ -1,7 +1,6 @@
 ---
 layout: default
 versions:
-- [2.0, 11/9/2013]
 - [1.1, 4/26/2013]
 - [1.0.1, 12/15/2012]
 - [1.0, 12/13/2012]
@@ -9,7 +8,7 @@ versions:
 - [0.9, 11/25/2012]
 ---
 
-**UpShot** combines the power of OS X's built-in screenshot functionality with **Dropbox**. This makes UpShot the easiest way to automatically upload and share screenshots on OS X.
+**UpShot** combines the power of OS X's built-in screenshot functionality with Dropbox. This makes UpShot the easiest way to automatically upload and share screenshots on OS X.
 
 **UpShot in three easy steps:**
 
@@ -19,7 +18,7 @@ versions:
 
 <div id="dlbutton">
 <a href="http://dl.upshot.it/UpShot-{{ page.versions|first|first }}.dmg" class="button">Download UpShot</a>
-<p>.dmg file, version {{ page.versions|first|first }}, {{ page.versions|first|last }}</p>
+<p>.dmg file, version {{ page.versions|first|first }}, {{ page.versions|first|last}}</p>
 </div>
 
 ### Installing UpShot
@@ -35,8 +34,6 @@ versions:
 
 ### Stay up to date
 The easiest way to stay up to date with development on UpShot is following [UpShot_it on Twitter][twitter]. Every [blog post][blog] and update will be announced there.
-
-**Note:** Before version 2.0, UpShot did not have automatic updates. If you're running an older version of UpShot, make sure to download the latest version >= 2.0 so you'll stay up to date on UpShot releases in the future.
 
 Here are the latest posts:
 
