@@ -21,7 +21,7 @@ The basic workflow is this:
 
 Other features currently include:
 
-* Custom domain name support
+* Custom domain name support (some "assembly" required)
 * randomized filenames
 
 
@@ -70,4 +70,4 @@ UpShot is released under a BSD license. Read the file ``LICENSE`` for more infor
 
 ---
 
-Copyright (c) 2012 [Fred Wenzel](http://fredericiana.com).
+Copyright (c) 2012-2013 [Fred Wenzel](http://fredericiana.com).
