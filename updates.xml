@@ -14,7 +14,7 @@
         </description>
         <pubDate>Fri, 9 Nov 2013 0:00:00 +0000</pubDate>
         <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
-        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5408192" type="application/octet-stream" sparkle:dsaSignature="MC4CFQCE7zpvsMxK9+MKjpbd1+OuAwBTEwIVAKAMQcA7pzGf/5KWdZdfNrEW4zWk" />
+        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5408192" type="application/octet-stream" sparkle:dsaSignature="MC0CFEFtrwzuMHqyF8NJtKMyO4NDyeGWAhUAnLCNPI7X3OfQK3LpdbteFbRFsUk=" />
       </item>
    </channel>
 </rss>
