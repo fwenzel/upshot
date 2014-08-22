@@ -19,6 +19,7 @@ import DropboxDetect
 import Preferences
 from lib import utils
 from lib.notifications import Growler
+from lib.updater import SparkleUpdater
 from lib.windows import alert
 
 
@@ -327,7 +328,8 @@ if __name__ == '__main__':
     Preferences.set_defaults()
 
     # Check for updates.
-    utils.auto_update()
+    updater = SparkleUpdater.alloc().init()
+    updater.auto_update()
 
     app = NSApplication.sharedApplication()
     delegate = Upshot.alloc().init()

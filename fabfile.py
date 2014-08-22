@@ -52,9 +52,10 @@ def build():
             'CFBundleShortVersionString': RELEASE,
             # Sparkle settings:
             'SUFeedURL': 'http://upshot.it/updates.xml',
+            #'SUFeedURL': 'file:///Users/fred/dev/upshot-www/updates.xml',  # local testing
             'SUPublicDSAKeyFile': 'dsa_pub.pem',
         },
-        #'frameworks': glob.glob('resources/*.framework'),
+        'frameworks': glob.glob('frameworks/*.framework'),
         'excludes': ['email']
     }
 

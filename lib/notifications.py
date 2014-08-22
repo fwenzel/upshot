@@ -10,10 +10,10 @@ class Growler(NSObject):
     def init(self):
         self = super(Growler, self).init()
         self.name = 'UpShot'
-        objc.loadBundle('GrowlApplicationBridge', globals(),
-                        bundle_path=objc.pathForFramework(os.path.join(
-                            NSBundle.mainBundle().resourcePath(),
-                            'Growl.framework')))
+        objc.loadBundle(
+            'GrowlApplicationBridge', globals(), bundle_path=os.path.join(
+                NSBundle.mainBundle().privateFrameworksPath(),
+                'Growl.framework'))
 
         self._growl = GrowlApplicationBridge
         self._growl.setGrowlDelegate_(self)

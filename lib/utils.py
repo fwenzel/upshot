@@ -29,21 +29,6 @@ def autopooled(f):
     return pooled_func
 
 
-def auto_update():
-    """Run Sparkle auto-updating."""
-    NSLog('Checking upshot.it for updates...')
-
-    # Load Sparkle framework.
-    base_path = os.path.join(os.path.dirname(os.getcwd()), 'Frameworks')
-    bundle_path = os.path.abspath(os.path.join(os.getcwd(), 'Sparkle.framework'))
-    NSLog(bundle_path)
-    objc.loadBundle('Sparkle', globals(), bundle_path=bundle_path)
-
-    # Instantiate a sparkle updater and check for updates.
-    sparkle_updater = SUUpdater.alloc().init()
-    sparkle_updater.checkForUpdates_(NSApplication.sharedApplication())
-
-
 def detect_dropbox_folder():
     """
     Find user's dropbox folder location.
