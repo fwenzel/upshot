@@ -12,9 +12,10 @@
          * Add automated update service (Sparkle!). Fix #14.
          * Do not say "paused" when quitting. Fix #51.
         </description>
-        <pubDate>Fri, 9 Nov 2013 0:00:00 +0000</pubDate>
+        <pubDate>Fri, 22 Aug 2014 0:00:00 +0000</pubDate>
         <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
-        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5408192" type="application/octet-stream" sparkle:dsaSignature="MC0CFEFtrwzuMHqyF8NJtKMyO4NDyeGWAhUAnLCNPI7X3OfQK3LpdbteFbRFsUk=" />
+        <sparkle:minimumSystemVersion>10.7</sparkle:minimumSystemVersion>
+        <enclosure url="http://dl.upshot.it/UpShot-2.0.dmg" sparkle:version="2.0" length="5431524" type="application/octet-stream" sparkle:dsaSignature="MC0CFCH7Ma54VRcNzJ8hErxX+cnXEYrxAhUAgL3DWc2QnMjjmbpuROPHn5LkDOc=" />
       </item>
    </channel>
 </rss>
