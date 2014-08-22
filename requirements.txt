@@ -1,4 +1,5 @@
-Fabric>=1.5.1
-pyobjc>=2.4
-py2app>=0.7.1
-watchdog>=0.6.0
+Fabric==1.9.1
+pyobjc==2.4
+modulegraph==0.11  # For py2app 0.8.1, which is incompatible with 0.12
+py2app==0.8.1
+watchdog==0.8.1

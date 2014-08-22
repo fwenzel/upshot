@@ -58,12 +58,29 @@ def build():
         'excludes': ['email']
     }
 
+    # XXX Workaround for https://bitbucket.org/ronaldoussoren/py2app/issue/126/
+    # zipio throws IOError and needs time for cleanup. Lolwut?
+    import py2app
+    if py2app.__version__ == '0.8.1':
+        import time
+        import py2app.util
+        def copy_decorator(f):
+            def decorated(*args, **kwargs):
+                try:
+                    f(*args, **kwargs)
+                except:
+                    time.sleep(2)
+                    raise
+            return decorated
+        py2app.util._copy_file = copy_decorator(py2app.util._copy_file)
+
     setup(
         name='UpShot',
         app=APP,
         data_files=DATA_FILES,
         options={'py2app': OPTIONS},
         setup_requires=['py2app'],
+        install_requires=['pyobjc'],
     )
 
     # Some cleanup.
