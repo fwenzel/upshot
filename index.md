@@ -18,7 +18,7 @@ versions:
 3. Actually, there is no step 3!
 
 <div id="dlbutton">
-<a href="http://dl.upshot.it/UpShot-{{ page.versions|first|first }}.dmg" class="button">Download UpShot</a>
+<a href="https://github.com/fwenzel/upshot/releases/download/release-{{ page.versions|first|first }}/UpShot-{{ page.versions|first|first }}.dmg" class="button">Download UpShot</a>
 <p>.dmg file, version {{ page.versions|first|first }}, {{ page.versions|first|last}}</p>
 </div>
 
@@ -59,7 +59,7 @@ For a summary of what changed between versions, check out the [changelog][change
 If you know what you're doing, you may download previous versions here:
 
 {% for v in page.versions %}
-* [v{{ v|first }} ({{ v|last }})](http://dl.upshot.it/UpShot-{{ v|first }}.dmg){% endfor %}
+* [v{{ v|first }} ({{ v|last }})](https://github.com/fwenzel/upshot/releases/download/release-{{ v|first }}/UpShot-{{ v|first }}.dmg){% endfor %}
 
 [changelog]: https://github.com/fwenzel/upshot/blob/master/CHANGELOG.md
 
