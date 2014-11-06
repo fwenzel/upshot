@@ -57,10 +57,13 @@ Acknowledgments
 ---------------
 Thanks to:
 
-* David Vignoni for his [upload icon][icon].
+* [Linh Pham Thi Dieu][linh] for his [upload icon][iconnew] (current versions of UpShot).
+* David Vignoni for his [upload icon][iconold] (early versions of UpShot).
 * Jason Costello for [Slate][slate], the website theme that upshot.it uses.
 
-[icon]: http://www.iconfinder.com/icondetails/1858/32/
+[linh]: http://linhpham.me/#works
+[iconnew]: https://www.iconfinder.com/icons/284001/cloud_upload_icon
+[iconold]: http://www.iconfinder.com/icondetails/1858/32/
 [slate]: https://github.com/jsncostello/slate
 
 

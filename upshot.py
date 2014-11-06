@@ -49,9 +49,9 @@ except ImportError:
 
 class Upshot(NSObject):
     """OS X status bar icon."""
-    image_paths = {
-        'icon16': 'icon16.png',
-        'icon16-off': 'icon16-off.png',
+    icon_paths = {
+        'icon_on': 'status',  # Refers to resources/<name>.png and <name>@2x.png
+        'icon_off': 'status-off',
     }
     images = {}
     statusitem = None
@@ -96,11 +96,11 @@ class Upshot(NSObject):
         self.statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
 
         # Set statusbar icon and color/grayscale mode.
-        for tag, img in self.image_paths.items():
-            self.images[tag] = NSImage.alloc().initByReferencingFile_(img)
-            self.images[tag].setTemplate_(
-                utils.get_pref('iconset') == 'grayscale')
-        self.statusitem.setImage_(self.images['icon16'])
+        for tag, img in self.icon_paths.items():
+            # Automatically pick named file as 1x or 2x based on Retina.
+            self.images[tag] = NSImage.imageNamed_(img)
+            self.images[tag].setTemplate_(True)
+        self.statusitem.setImage_(self.images['icon_on'])
 
         self.statusitem.setHighlightMode_(1)
         self.statusitem.setToolTip_('Upshot Screenshot Sharing')
@@ -163,13 +163,9 @@ class Upshot(NSObject):
         if self.statusitem is None:
             return
 
-        # Apply iconset
-        self.images['icon16'].setTemplate_(
-            utils.get_pref('iconset') == 'grayscale')
-
         running = (self.observer is not None)
-        self.statusitem.setImage_(self.images['icon16' if running else
-                                              'icon16-off'])
+        self.statusitem.setImage_(self.images['icon_on' if running else
+                                              'icon_off'])
 
         if utils.get_pref('dropboxid'):  # Runnable.
             self.menuitems['stop'].setHidden_(not running)

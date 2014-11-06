@@ -81,7 +81,7 @@ def build():
         data_files=DATA_FILES,
         options={'py2app': OPTIONS},
         setup_requires=['py2app'],
-        install_requires=['pyobjc'],
+        install_requires=['pyobjc-core'],
     )
 
     # Some cleanup.
