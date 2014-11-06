@@ -94,10 +94,14 @@ def make_dmg():
         _err('Run `fab build` before you can build a DMG file.')
         sys.exit(1)
 
+    dmg_file = _path('dist', DMGNAME)
+    if os.path.exists(dmg_file):
+        os.unlink(dmg_file)
+
     tmpdir = mkdtemp()
     with lcd(tmpdir):
         # Unzip and mount template sparseimage.
-        local('unzip -o "%s"' % _path('dmg-template',
+        local('unzip -o "%s"' % _path('template-files', 'dmg-template',
                                       'template.sparseimage.zip'))
         local('hdiutil mount template.sparseimage')
 
@@ -109,9 +113,9 @@ def make_dmg():
 
         # Make a DMG out of it.
         local('hdiutil convert template.sparseimage -format UDBZ '
-              '-o "%s" > /dev/null' % _path('dist', DMGNAME))
+              '-o "%s" > /dev/null' % dmg_file)
         # "Internet-enable" it.
-        local('hdiutil internet-enable "%s"' % _path('dist', DMGNAME))
+        local('hdiutil internet-enable "%s"' % dmg_file)
 
     # Clean up.
     local('rm -rf "%s"' % tmpdir)
