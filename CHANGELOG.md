@@ -3,6 +3,9 @@ UpShot Changelog
 
 master
 ------
+* New icon, retina and dark mode compatible. Fix #48. Fix #41.
+* Updated and fixed background image for DMG file. Fix #61.
+* Added menu item to search for updates. Fix #54.
 
 v2.0 (8/22/2014)
 ----------------
