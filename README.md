@@ -23,6 +23,7 @@ Other features currently include:
 
 * Custom domain name support (some "assembly" required)
 * randomized filenames
+* (optional) scaledown of retina-sized screenshots
 
 
 Contributing
