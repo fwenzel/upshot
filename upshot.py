@@ -55,10 +55,15 @@ class Upshot(NSObject):
     }
     images = {}
     statusitem = None
+    updater = None  # Sparkle instance.
     observer = None  # Screenshot directory observer.
     menuitems = {}  # Shortcut to our menuitems.
 
     def applicationDidFinishLaunching_(self, notification):
+        # Check for updates.
+        self.updater = SparkleUpdater.alloc().init()
+        self.updater.auto_update()
+
         if not DROPBOX_DIR:  # Oh-oh.
             alert('Unable to detect Dropbox folder',
                   'UpShot requires Dropbox, for now. Please install it, then '
@@ -140,6 +145,11 @@ class Upshot(NSObject):
         self.menu.addItem_(NSMenuItem.separatorItem())
 
         m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            'Check for Updates...', 'updateCheck:', '')
+        self.menu.addItem_(m)
+        self.menuitems['updatecheck'] = m
+
+        m = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Open UpShot Project Website', 'website:', '')
         self.menu.addItem_(m)
         self.menuitems['website'] = m
@@ -186,6 +196,9 @@ class Upshot(NSObject):
         app = NSApplication.sharedApplication()
         app.activateIgnoringOtherApps_(True)
         app.orderFrontStandardAboutPanel_(sender)
+
+    def updateCheck_(self, sender=None):
+        self.updater.sparkle.checkForUpdates_(sender)
 
     def website_(self, sender=None):
         """Open the UpShot homepage in a browser."""
@@ -322,10 +335,6 @@ class ScreenshotHandler(FileSystemEventHandler):
 if __name__ == '__main__':
     # Prepare preferences service.
     Preferences.set_defaults()
-
-    # Check for updates.
-    updater = SparkleUpdater.alloc().init()
-    updater.auto_update()
 
     app = NSApplication.sharedApplication()
     delegate = Upshot.alloc().init()
