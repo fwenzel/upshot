@@ -1,7 +1,10 @@
 import base64
+import datetime
 import os
 import random
+import re
 import string
+import time
 from functools import wraps
 from subprocess import check_output
 from urlparse import urljoin
@@ -130,6 +133,35 @@ def share_url(filename, url=None):
         return urljoin(
             DEFAULT_SHARE_URL.format(dropboxid=get_pref('dropboxid')),
             filename)
+
+
+def timestamp_from_filename(name):
+    """
+    Generate timestamp from screenshot filename.
+
+    Example name: Screen Shot 2014-11-07 at 2.50.52 PM.png
+    """
+    parsed_date = re.search(r'(\d{4})-(\d{2})-(\d{2})', name)
+    if not parsed_date:
+        return
+    year = int(parsed_date.group(1))
+    month = int(parsed_date.group(2))
+    day = int(parsed_date.group(3))
+
+    parsed_time = re.search(r'(\d+)\.(\d+)\.(\d+)( [AP]M)?', name)
+    if not parsed_time:
+        return
+    hour = int(parsed_time.group(1))
+    minute = int(parsed_time.group(2))
+    second = int(parsed_time.group(3))
+    try:
+        if parsed_time.group(4) == ' PM':
+            hour += 12
+    except:
+        pass
+
+    return time.mktime(datetime.datetime(year, month, day, hour, minute,
+                                         second).timetuple())
 
 
 @autopooled

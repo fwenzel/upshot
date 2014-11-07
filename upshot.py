@@ -264,13 +264,17 @@ class ScreenshotHandler(FileSystemEventHandler):
     @utils.fail_gracefully
     def handle_screenshot_candidate(self, f):
         """Given a candidate file, handle it if it's a screenshot."""
-        # Do not act on files that are too old (so we don't swallow old files
-        # that are not new screenshots).
-        if os.path.getctime(f) - time.time() > TIME_THRESHOLD:
-            return
-
         # The file could be anything. Only act if it's a screenshot.
         if not utils.is_screenshot(f):
+            return
+
+        # Do not act on files that are too old (so we don't swallow old files
+        # that are not new screenshots).
+        now = time.time()
+        filename_time = utils.timestamp_from_filename(f)  # Parse time out of filename.
+        if (now - os.path.getctime(f) > TIME_THRESHOLD or
+            (filename_time and now - filename_time > TIME_THRESHOLD)):
+            log.debug('Ignoring %s, too old.' % f)
             return
 
         # Create target dir if needed.
