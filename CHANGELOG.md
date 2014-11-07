@@ -6,6 +6,7 @@ master
 * New icon, retina and dark mode compatible. Fix #48. Fix #41.
 * Updated and fixed background image for DMG file. Fix #61.
 * Added menu item to search for updates. Fix #54.
+* Log with Growl on 10.7, with notification center on 10.8 and up. Fix #59.
 
 v2.0 (8/22/2014)
 ----------------

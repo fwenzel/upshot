@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import glob
-import logging
 import os
 import shutil
 import sys
@@ -17,8 +16,9 @@ from watchdog.observers import Observer
 
 import DropboxDetect
 import Preferences
-from lib import utils
-from lib.notifications import Growler
+from lib import notifications, utils
+from lib.logger import log
+from lib.notifications import notify
 from lib.updater import SparkleUpdater
 from lib.windows import alert
 
@@ -34,11 +34,6 @@ HOMEPAGE_URL = 'http://upshot.it'
 DROPBOX_PUBLIC_INFO = 'https://www.dropbox.com/help/16'
 
 TIME_THRESHOLD = 15  # How many seconds after creation do we handle a file?
-
-# Set up logging
-LOG_LEVEL = logging.DEBUG
-logging.basicConfig(level=LOG_LEVEL)
-log = logging.getLogger('upshot')
 
 # Local settings
 try:
@@ -86,7 +81,9 @@ class Upshot(NSObject):
                 sw.openURL_(NSURL.URLWithString_(DROPBOX_PUBLIC_INFO))
             self.quit_(self)
 
+        # Initialize things.
         self.build_menu()
+
         # Go do something useful.
         if utils.get_pref('dropboxid'):
             self.startListening_()
@@ -218,8 +215,7 @@ class Upshot(NSObject):
         log.debug('Listening for screen shots to be added to: %s' % (
                   SCREENSHOT_DIR))
 
-        growl = Growler.alloc().init()
-        growl.notify('UpShot started', 'and listening for screenshots!')
+        notify('UpShot started', 'and listening for screenshots!')
 
     def stopListening_(self, sender=None):
         """Stop listening to changes ot the screenshot dir."""
@@ -229,13 +225,12 @@ class Upshot(NSObject):
             self.observer = None
             log.debug('Stop listening for screenshots.')
 
-            growl = Growler.alloc().init()
             if sender == self.menuitems['quit']:
-                growl.notify('UpShot shutting down',
-                             'Not listening for screenshots anymore!')
+                notify('UpShot shutting down',
+                       'Not listening for screenshots anymore!')
             else:
-                growl.notify('UpShot paused',
-                             'Not listening for screenshots for now!')
+                notify('UpShot paused',
+                       'Not listening for screenshots for now!')
         self.update_menu()
 
     def restart_(self, sender=None):
@@ -310,22 +305,20 @@ class ScreenshotHandler(FileSystemEventHandler):
 
         # Create shared URL.
         url = utils.share_url(urllib.quote(shared_name))
-        logging.debug('Share URL is %s' % url)
+        log.debug('Share URL is %s' % url)
 
-        logging.debug('Copying to clipboard.')
+        log.debug('Copying to clipboard.')
         utils.pbcopy(url)
 
         # Notify user.
-        growl = Growler.alloc().init()
-        growl.setCallback(self.notify_callback)
-        growl.notify('Screenshot shared!',
-                     'Your URL is: %s\n\n'
-                     'Click here to view file.' % url,
-                     context=target_file)
+        notify('Screenshot shared!',
+               'Your URL is: %s\n\n'
+               'Click here to view file.' % url,
+               context=target_file, callback=self.notify_callback)
 
     def notify_callback(self, filepath):
         """
-        When growl notification is clicked, open Finder with shared file.
+        When notification is clicked, open Finder with shared file.
         """
         ws = NSWorkspace.sharedWorkspace()
         ws.activateFileViewerSelectingURLs_(
