@@ -41,8 +41,8 @@ class PreferencesWindowController(UpShotWindowController):
     url_text = objc.IBOutlet()
     url_example = objc.IBOutlet()
 
-    def showWindow_(self, sender):
-        super(PreferencesWindowController, self).showWindow_(sender)
+    def windowDidLoad(self):
+        """Show existing settings on initial load."""
         self.updateDisplay()
 
     def updateDisplay(self):

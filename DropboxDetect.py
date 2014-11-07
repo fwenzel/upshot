@@ -25,8 +25,7 @@ class DropboxDetectWindowController(UpShotWindowController):
         img = NSImage.alloc().initByReferencingFile_('copy-public.png')
         self.imgfield.setImage_(img)
 
-    def showWindow_(self, sender):
-        super(DropboxDetectWindowController, self).showWindow_(sender)
+    def windowDidLoad(self):
         self.okbutton.setEnabled_(False)
         self.startTimer()
 
