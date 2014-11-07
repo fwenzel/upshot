@@ -273,7 +273,8 @@ class ScreenshotHandler(FileSystemEventHandler):
         now = time.time()
         filename_time = utils.timestamp_from_filename(f)  # Parse time out of filename.
         if (now - os.path.getctime(f) > TIME_THRESHOLD or
-            (filename_time and now - filename_time > TIME_THRESHOLD)):
+            not filename_time or
+            now - filename_time > TIME_THRESHOLD):
             log.debug('Ignoring %s, too old.' % f)
             return
 
