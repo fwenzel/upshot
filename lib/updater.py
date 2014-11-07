@@ -14,6 +14,8 @@ class SparkleUpdater(NSObject):
     """
 
     def init(self):
+        self = super(SparkleUpdater, self).init()
+
         # Load Sparkle framework.
         bundle_path = os.path.join(
             NSBundle.mainBundle().privateFrameworksPath(),
