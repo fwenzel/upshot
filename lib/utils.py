@@ -10,6 +10,8 @@ import objc
 from Foundation import *
 from AppKit import *
 
+from lib.logger import log
+
 
 CHARS = string.ascii_letters + string.digits
 DEFAULT_SHARE_URL = 'http://dl.dropboxusercontent.com/u/{dropboxid}/Screenshots/'
@@ -41,6 +43,20 @@ def detect_dropbox_folder():
             return base64.b64decode(encoded_dir)
     except:
         return None
+
+
+def fail_gracefully(f):
+    """
+    Decorator to swallow/log exceptions rather than throw them, for
+    noncritical, volatile functions.
+    """
+    @wraps(f)
+    def swallow_exceptions(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception, e:
+            log.debug(e)
+    return swallow_exceptions
 
 
 @autopooled

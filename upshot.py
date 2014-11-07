@@ -258,10 +258,10 @@ class ScreenshotHandler(FileSystemEventHandler):
         Catch move event: For full screenshots, OS X creates a temp file,
         then moves it to its final name.
         """
-        if not isinstance(event, FileMovedEvent):
-            return
-        self.handle_screenshot_candidate(event.dest_path)
+        if isinstance(event, FileMovedEvent):
+            self.handle_screenshot_candidate(event.dest_path)
 
+    @utils.fail_gracefully
     def handle_screenshot_candidate(self, f):
         """Given a candidate file, handle it if it's a screenshot."""
         # Do not act on files that are too old (so we don't swallow old files
