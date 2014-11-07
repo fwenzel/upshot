@@ -4,4 +4,4 @@ pyobjc-framework-Cocoa==3.0.3
 pyobjc-framework-LaunchServices==3.0.3
 modulegraph==0.11  # For py2app 0.8.1, which is incompatible with 0.12
 py2app==0.8.1
-watchdog==0.8.1
+watchdog==0.8.2
