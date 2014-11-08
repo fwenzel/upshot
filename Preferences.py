@@ -16,7 +16,8 @@ DEFAULTS = {
 }
 DOMAIN_HELP_URL = ('http://fredericiana.com/2012/12/09/'
                    'custom-domain-with-dropbox/')
-EXAMPLE_FILENAME = 'hZr9.png'
+EXAMPLE_FILENAME_LONG = 'Screen Shot 2014-08-01 at 10.24.18 AM.png'
+EXAMPLE_FILENAME_SHORT = 'hZr9.png'
 
 
 class PreferencesWindowController(UpShotWindowController):
@@ -57,17 +58,19 @@ class PreferencesWindowController(UpShotWindowController):
         self.dropboxid.setStringValue_(get_pref('dropboxid'))
 
         customurl = get_pref('customurl')
+        example_filename = (EXAMPLE_FILENAME_SHORT if get_pref('randomize')
+                            else EXAMPLE_FILENAME_LONG)
         if not customurl:  # Default.
             self.url_select.selectCellWithTag_(0)
             self.url_text.setEnabled_(False)
             self.url_text.setStringValue_('')
-            self.url_example.setStringValue_(share_url(EXAMPLE_FILENAME,
+            self.url_example.setStringValue_(share_url(example_filename,
                                                        url=''))
         else:  # Custom.
             self.url_select.selectCellWithTag_(1)
             self.url_text.setEnabled_(True)
             self.url_text.setStringValue_(customurl)
-            self.url_example.setStringValue_(share_url(EXAMPLE_FILENAME,
+            self.url_example.setStringValue_(share_url(example_filename,
                                                        url=customurl))
 
     @objc.IBAction
@@ -86,16 +89,18 @@ class PreferencesWindowController(UpShotWindowController):
             pass
 
         # Custom URL settings.
+        example_filename = (EXAMPLE_FILENAME_SHORT if get_pref('randomize')
+                            else EXAMPLE_FILENAME_LONG)
         if self.url_select.selectedCell().tag() == 0:  # Default
             self.url_text.setStringValue_('')
             self.url_text.setEnabled_(False)
-            self.url_example.setStringValue_(share_url(EXAMPLE_FILENAME,
+            self.url_example.setStringValue_(share_url(example_filename,
                                                        url=''))
             set_pref('customurl', '')
         else:  # Custom
             self.url_text.setEnabled_(True)
             self.url_example.setStringValue_(
-                share_url(EXAMPLE_FILENAME, url=self.url_text.stringValue()))
+                share_url(example_filename, url=self.url_text.stringValue()))
             set_pref('customurl', self.url_text.stringValue())
 
     @objc.IBAction

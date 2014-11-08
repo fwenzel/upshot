@@ -10,6 +10,7 @@ master
 * Use windowDidLoad rather than override showWindow. Fix #62.
 * Never die while processing a screenshot, log exceptions as needed. Fix #38.
 * Parse timestamp out of screenshot filename to not reprocess old files. Fix #40.
+* Reflect name randomization in example URL. Fix #60.
 
 v2.0 (8/22/2014)
 ----------------
