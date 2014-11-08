@@ -46,8 +46,6 @@ This will build an app package in the directory ``dist``. You can execute it fro
 [fabric]: http://fabfile.org/
 [virtualenv]: http://www.virtualenv.org/
 
-> *Note:* Your virtualenv might not contain libpython2.x.dylib and thus cause an error. You can simply ``cd $VIRTUAL_ENV`` and ``ln -s /path/to/libpython2.x.dylib`` as a workaround.
-
 
 Configuration
 -------------
