@@ -5,8 +5,28 @@
       <link>http://upshot.it/updates.xml</link>
       <description>Updates to the UpShot automatic screenshot uploader.</description>
       <language>en</language>
+
       <item>
-        <title>Version 2.0</title>
+        <title>UpShot 2.1</title>
+        <description>
+          * New icon, retina and dark mode compatible. Fix #48. Fix #41.
+          * Updated and fixed background image for DMG file. Fix #61.
+          * Added menu item to search for updates. Fix #54.
+          * Check for updates automatically, and provide option to disable it. Fix #63, fix #55.
+          * Log with Growl on 10.7, with notification center on 10.8 and up. Fix #59.
+          * Use windowDidLoad rather than override showWindow. Fix #62.
+          * Never die while processing a screenshot, log exceptions as needed. Fix #38.
+          * Parse timestamp out of screenshot filename to not reprocess old files. Fix #40.
+          * Reflect name randomization in example URL. Fix #60.
+        </description>
+        <pubDate>Fri, 7 Nov 2014 0:00:00 +0000</pubDate>
+        <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
+        <sparkle:minimumSystemVersion>10.7</sparkle:minimumSystemVersion>
+        <enclosure url="https://github.com/fwenzel/upshot/releases/download/release-2.1/UpShot-2.1.dmg" sparkle:version="2.1" length="4996640" type="application/octet-stream" sparkle:dsaSignature="MC0CFQChfREMuMX3vfxItEl6ub5LnuQICQIUF6dBIUBgFgBS/xw1/rbXZFEqQGY=" />
+      </item>
+
+      <item>
+        <title>UpShot 2.0</title>
         <description>
          * Allow auto-scaling of retina screenshots down to 72dpi. Fix #44.
          * Add automated update service (Sparkle!). Fix #14.
