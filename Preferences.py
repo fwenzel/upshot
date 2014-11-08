@@ -9,7 +9,6 @@ from lib.windows import UpShotWindowController
 
 DEFAULTS = {
     'launchAtStartup': True,
-    'iconset': 'default',  # Which status bar icon? 'default' or 'grayscale'
     'randomize': True,  # Randomize screenshot names?
     'copyonly': False,  # Copy (don't move) screen shots.
     'retinascale': False,  # Scale upscaled retina images to low DPI automatically.
@@ -25,7 +24,6 @@ class PreferencesWindowController(UpShotWindowController):
 
     # General
     launchAtStartup = objc.IBOutlet()
-    iconset = objc.IBOutlet()
 
     # Screenshots
     randomize = objc.IBOutlet()
@@ -48,8 +46,6 @@ class PreferencesWindowController(UpShotWindowController):
     def updateDisplay(self):
         """Update window display from settings."""
         self.launchAtStartup.setState_(get_pref('launchAtStartup'))
-        self.iconset.selectCellWithTag_(
-            1 if get_pref('iconset') == 'grayscale' else 0)
 
         self.randomize.setState_(get_pref('randomize'))
         self.copyonly.setState_(get_pref('copyonly'))
@@ -79,15 +75,6 @@ class PreferencesWindowController(UpShotWindowController):
         """Save changed settings."""
         set_pref('launchAtStartup', bool(self.launchAtStartup.state()))
         launch_at_startup(bool(self.launchAtStartup.state()))
-
-        # Iconset
-        iconset_sel = self.iconset.selectedCell().tag()
-        if iconset_sel == 1:  # Grayscale
-            set_pref('iconset', 'grayscale')
-        else:
-            set_pref('iconset', 'default')
-        upshot = NSApplication.sharedApplication().delegate()
-        upshot.update_menu()
 
         set_pref('randomize', bool(self.randomize.state()))
         set_pref('copyonly', bool(self.copyonly.state()))
