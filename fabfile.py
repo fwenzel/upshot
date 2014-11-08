@@ -56,7 +56,7 @@ def build():
             'SUPublicDSAKeyFile': 'dsa_pub.pem',
         },
         'frameworks': glob.glob('frameworks/*.framework'),
-        'excludes': ['email']
+        'excludes': ['distutils', 'email']
     }
 
     # XXX Workaround for https://bitbucket.org/ronaldoussoren/py2app/issue/126/
