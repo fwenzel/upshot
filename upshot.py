@@ -57,7 +57,9 @@ class Upshot(NSObject):
     def applicationDidFinishLaunching_(self, notification):
         # Check for updates.
         self.updater = SparkleUpdater.alloc().init()
-        self.updater.auto_update()
+        if utils.get_pref('autoupdate'):
+            self.updater.sparkle.setAutomaticallyChecksForUpdates_(True)
+            self.updater.auto_update()
 
         if not DROPBOX_DIR:  # Oh-oh.
             alert('Unable to detect Dropbox folder',

@@ -9,6 +9,7 @@ from lib.windows import UpShotWindowController
 
 DEFAULTS = {
     'launchAtStartup': True,
+    'autoupdate': True,  # Check for updates periodically.
     'randomize': True,  # Randomize screenshot names?
     'copyonly': False,  # Copy (don't move) screen shots.
     'retinascale': False,  # Scale upscaled retina images to low DPI automatically.
@@ -25,6 +26,7 @@ class PreferencesWindowController(UpShotWindowController):
 
     # General
     launchAtStartup = objc.IBOutlet()
+    autoupdate = objc.IBOutlet()
 
     # Screenshots
     randomize = objc.IBOutlet()
@@ -47,6 +49,7 @@ class PreferencesWindowController(UpShotWindowController):
     def updateDisplay(self):
         """Update window display from settings."""
         self.launchAtStartup.setState_(get_pref('launchAtStartup'))
+        self.autoupdate.setState_(get_pref('autoupdate'))
 
         self.randomize.setState_(get_pref('randomize'))
         self.copyonly.setState_(get_pref('copyonly'))
@@ -78,6 +81,11 @@ class PreferencesWindowController(UpShotWindowController):
         """Save changed settings."""
         set_pref('launchAtStartup', bool(self.launchAtStartup.state()))
         launch_at_startup(bool(self.launchAtStartup.state()))
+
+        set_pref('autoupdate', bool(self.autoupdate.state()))
+        upshot = NSApplication.sharedApplication().delegate()
+        upshot.updater.sparkle.setAutomaticallyChecksForUpdates_(
+            bool(self.autoupdate.state()))
 
         set_pref('randomize', bool(self.randomize.state()))
         set_pref('copyonly', bool(self.copyonly.state()))

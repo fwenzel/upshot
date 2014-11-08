@@ -11,6 +11,7 @@ master
 * Never die while processing a screenshot, log exceptions as needed. Fix #38.
 * Parse timestamp out of screenshot filename to not reprocess old files. Fix #40.
 * Reflect name randomization in example URL. Fix #60.
+* Check for updates automatically, and provide option to disable it. Fix #63, fix #55.
 
 v2.0 (8/22/2014)
 ----------------
