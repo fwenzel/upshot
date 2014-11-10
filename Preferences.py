@@ -53,7 +53,7 @@ class PreferencesWindowController(UpShotWindowController):
 
         self.randomize.setState_(get_pref('randomize'))
         self.copyonly.setState_(get_pref('copyonly'))
-        self.copyonly.setState_(get_pref('retinascale'))
+        self.retinascale.setState_(get_pref('retinascale'))
 
         dropboxdir = detect_dropbox_folder()
         self.dropboxdir.setStringValue_(
