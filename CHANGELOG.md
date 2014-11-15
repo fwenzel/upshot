@@ -3,6 +3,8 @@ UpShot Changelog
 
 master
 ------
+* Untangle copyonly and retina preferences. Fix #65.
+* Delay screenshot metadata handling by one second to give OSX time to catch up. Fix #68.
 
 v2.1 (11/7/2014)
 ----------------
