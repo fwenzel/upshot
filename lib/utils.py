@@ -4,6 +4,7 @@ import os
 import random
 import re
 import string
+import threading
 import time
 from functools import wraps
 from subprocess import check_output
@@ -32,6 +33,19 @@ def autopooled(f):
         del pool
         return result
     return pooled_func
+
+
+def delay(delay=0.):
+    """
+    Decorator delaying the execution of a function for a while.
+    """
+    def wrap(f):
+        @wraps(f)
+        def delayed(*args, **kwargs):
+            timer = threading.Timer(delay, f, args=args, kwargs=kwargs)
+            timer.start()
+        return delayed
+    return wrap
 
 
 def detect_dropbox_folder():

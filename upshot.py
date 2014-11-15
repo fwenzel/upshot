@@ -263,11 +263,13 @@ class ScreenshotHandler(FileSystemEventHandler):
         if isinstance(event, FileMovedEvent):
             self.handle_screenshot_candidate(event.dest_path)
 
+    @utils.delay(1.0)
     @utils.fail_gracefully
     def handle_screenshot_candidate(self, f):
         """Given a candidate file, handle it if it's a screenshot."""
         # The file could be anything. Only act if it's a screenshot.
         if not utils.is_screenshot(f):
+            log.debug('%s is missing or not a screenshot.' % f)
             return
 
         # Do not act on files that are too old (so we don't swallow old files
