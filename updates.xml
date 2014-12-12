@@ -7,6 +7,19 @@
       <language>en</language>
 
       <item>
+        <title>UpShot 2.1.1</title>
+        <description>
+          * Untangle copyonly and retina preferences. Fix #65.
+          * Delay screenshot metadata handling by one second to give OSX time to catch up. Fix #68.
+          * Fix AM/PM handling for 12PM. Fix #69.
+        </description>
+        <pubDate>Thu, 11 Dec 2014 0:00:00 +0000</pubDate>
+        <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
+        <sparkle:minimumSystemVersion>10.7</sparkle:minimumSystemVersion>
+        <enclosure url="https://github.com/fwenzel/upshot/releases/download/2.1.1/UpShot-2.1.1.dmg" sparkle:version="2.1.1" length="4996309" type="application/octet-stream" sparkle:dsaSignature="MC4CFQChc82tYzESpUQ7x8f4/d8jqxbncQIVAJromE8nvAPHQZ1BmYC20XvE1nag" />
+      </item>
+
+      <item>
         <title>UpShot 2.1</title>
         <description>
           * New icon, retina and dark mode compatible. Fix #48. Fix #41.
