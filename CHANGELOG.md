@@ -3,8 +3,12 @@ UpShot Changelog
 
 master
 ------
+
+v2.1.1 (12/11/2014)
+-------------------
 * Untangle copyonly and retina preferences. Fix #65.
 * Delay screenshot metadata handling by one second to give OSX time to catch up. Fix #68.
+* Fix AM/PM handling for 12PM. Fix #69.
 
 v2.1 (11/7/2014)
 ----------------
