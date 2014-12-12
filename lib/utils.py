@@ -169,8 +169,9 @@ def timestamp_from_filename(name):
     minute = int(parsed_time.group(2))
     second = int(parsed_time.group(3))
     try:
+        # TODO: Test. This used to fail on Screen Shot 2014-12-10 at 12.42.07 PM.
         if parsed_time.group(4) == ' PM':
-            hour += 12
+            hour = (hour % 12) + 12
     except:
         pass
 
