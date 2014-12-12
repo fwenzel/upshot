@@ -16,7 +16,7 @@
         <pubDate>Thu, 11 Dec 2014 0:00:00 +0000</pubDate>
         <sparkle:releaseNotesLink>https://raw.github.com/fwenzel/upshot/master/CHANGELOG.md</sparkle:releaseNotesLink>
         <sparkle:minimumSystemVersion>10.7</sparkle:minimumSystemVersion>
-        <enclosure url="https://github.com/fwenzel/upshot/releases/download/2.1.1/UpShot-2.1.1.dmg" sparkle:version="2.1.1" length="4996309" type="application/octet-stream" sparkle:dsaSignature="MC4CFQChc82tYzESpUQ7x8f4/d8jqxbncQIVAJromE8nvAPHQZ1BmYC20XvE1nag" />
+        <enclosure url="https://github.com/fwenzel/upshot/releases/download/release-2.1.1/UpShot-2.1.1.dmg" sparkle:version="2.1.1" length="4996309" type="application/octet-stream" sparkle:dsaSignature="MC4CFQChc82tYzESpUQ7x8f4/d8jqxbncQIVAJromE8nvAPHQZ1BmYC20XvE1nag" />
       </item>
 
       <item>
