@@ -9,7 +9,7 @@ from setuptools import setup
 from fabric.api import local
 from fabric.context_managers import lcd
 
-RELEASE = '2.1.1'
+RELEASE = '2.2'
 
 HERE = os.path.dirname(__file__)
 RUN_PATH = './dist/UpShot.app/Contents/MacOS/UpShot'
@@ -56,7 +56,7 @@ def build():
             'SUPublicDSAKeyFile': 'dsa_pub.pem',
         },
         'frameworks': glob.glob('frameworks/*.framework'),
-        'excludes': ['distutils', 'email']
+        'excludes': ['distutils']
     }
 
     # XXX Workaround for https://bitbucket.org/ronaldoussoren/py2app/issue/126/

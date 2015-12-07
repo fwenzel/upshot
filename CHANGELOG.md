@@ -4,6 +4,10 @@ UpShot Changelog
 master
 ------
 
+v2.2 (12/5/2014)
+----------------
+* Version bump for El Capitan rebuild against pyobjc dev version. Fix #73.
+
 v2.1.1 (12/11/2014)
 -------------------
 * Untangle copyonly and retina preferences. Fix #65.
