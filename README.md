@@ -3,6 +3,9 @@ UpShot
 
 ![](https://raw.github.com/fwenzel/upshot/master/upshot.png)
 
+
+# NOTE: As of March 2017, Dropbox has removed the public folder feature permanently, which breaks UpShot. There are discussions in [Issue #77](https://github.com/fwenzel/upshot/issues/77) on how to proceed, but for now, UpShot cannot function as expected because of this Dropbox feature change.
+
 UpShot is an automatic screen shot uploader for OS X, written in Python.
 
 For sharing, UpShot uses Dropbox's Public folder, giving you maximum control over what you share.
